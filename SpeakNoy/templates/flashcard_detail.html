@@ -5,9 +5,23 @@
 {% block title %}{{ flashcard.word }}{% endblock %}
 {% block content %}
     <h1>{{ flashcard.word }}</h1>
-    <ul>
-        <li>{{ flashcard.pronunciation }}</li>
-        <li>{{ flashcard.definition }}</li>
-        <li>{{ flashcard.purpose }}</li>
-    </ul>
+    <button id="flip">Flip Card</button>
+
+    <div id="rearOfCard" style="display:none;">
+        <ul>
+            <li>{{ flashcard.pronunciation }}</li>
+            <li>{{ flashcard.definition }}</li>
+            <li>{{ flashcard.purpose }}</li>
+        </ul>
+    </div>
+
+    <script>
+        const flipButton = document.getElementById('flip')
+        const rearOfCard = document.getElementById('rearOfCard')
+
+        flipButton.addEventListener('click', function () {
+            if (rearOfCard.style.display === "none") rearOfCard.style.display = "block";
+            else rearOfCard.style.display = "none";
+        });
+    </script>
 {% endblock %}
