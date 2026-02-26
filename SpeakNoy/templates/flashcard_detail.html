@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ flashcard.word }}{% endblock %}
+{% block content %}
+    <h1>{{ flashcard.word }}</h1>
+    <ul>
+        <li>{{ flashcard.pronunciation }}</li>
+        <li>{{ flashcard.definition }}</li>
+        <li>{{ flashcard.purpose }}</li>
+    </ul>
+{% endblock %}

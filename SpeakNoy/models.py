@@ -3,11 +3,11 @@ from django.db import models
 # Create your models here.
 class Flashcard(models.Model):
     PURPOSE_CHOICES = [
-        ("noun", "Noun"),
-        ("pronoun", "Pronoun"),
-        ("verb", "Verb"),
-        ("adjective", "Adjective"),
-        ("adverb", "Adverb"),
+        ("Noun", "Noun"),
+        ("Pronoun", "Pronoun"),
+        ("Verb", "Verb"),
+        ("Adjective", "Adjective"),
+        ("Adverb", "Adverb"),
     ]
 
     word = models.CharField(max_length=63)
