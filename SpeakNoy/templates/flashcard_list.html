@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Flashcards{% endblock %}
+{% block content %}
+    <ul>
+        {% for card in flashcard %}
+            <li><a href="{% url 'SpeakNoy:card' card.pk %}">{{ card.word }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
