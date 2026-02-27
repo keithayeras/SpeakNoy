@@ -8,6 +8,17 @@ class Flashcard(models.Model):
         ("Verb", "Verb"),
         ("Adjective", "Adjective"),
         ("Adverb", "Adverb"),
+        ("Expression", "Expression"),
+    ]
+
+    DIALECT_CHOICES = [
+        ("Cebuano", "Cebuano"),
+        ("Ilocano", "Ilocano"),
+    ]
+
+    CARDTYPE_CHOICES = [
+        ("Universal", "Universal"),
+        ("Custom", "Custom")
     ]
 
     word = models.CharField(max_length=63)
@@ -17,6 +28,16 @@ class Flashcard(models.Model):
         max_length=20,
         choices=PURPOSE_CHOICES,
         default="Noun"
+    )
+    dialect = models.CharField(
+        max_length=20,
+        choices=DIALECT_CHOICES,
+        default=None
+    )
+    cardtype = models.CharField(
+        max_length=9,
+        choices=CARDTYPE_CHOICES,
+        default="Custom"
     )
 
     def __str__(self):
