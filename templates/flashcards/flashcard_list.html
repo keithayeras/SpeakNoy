@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'flashcards/login_popup.css' %}">
+{% endblock %}
+
+{% block title %}Flashcards{% endblock %}
+{% block content %}
+    {% if show_login_popup %}
+        <div id="loginModal" class="modal-overlay">
+            <div class="modal-content">
+                <h3>Please Login to Continue</h3>
+                <p>You need an account to access the SpeakNoy dashboard.</p>
+                
+                <a href="{% url 'accounts:login' %}" class="btn">Login</a>
+                <a href="{% url 'accounts:signup' %}" class="btn-secondary">Register</a>
+            </div>
+        </div>
+    {% endif %}
+    <ul>
+        {% for card in flashcard %}
+            <li><a href="{% url 'SpeakNoy:card' card.pk %}">{{ card.word }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
