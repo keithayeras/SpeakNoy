@@ -6,7 +6,32 @@
 {% endblock %}
 
 {% block title %}Flashcards{% endblock %}
+
 {% block content %}
+    <div class="dialect-header">
+        <p>Currently studying: <strong>{{ selected_dialect|default:"None" }}</strong></p>
+        <form action="" method="get">
+            <select name="set_dialect" onchange="this.form.submit()">
+                <option value="">-- Change Dialect --</option>
+                {% for d in dialects %}
+                    <option value="{{ d }}" {% if d == selected_dialect %}selected{% endif %}>{{ d }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    {% if show_selection_prompt %}
+        <div class="modal-overlay">
+            <div class="modal-content">
+                <h2>Welcome to SpeakNoy!</h2>
+                <p>Which dialect would you like to learn today?</p>
+                <div class="dialect-grid">
+                    {% for d in dialects %}
+                        <a href="?set_dialect={{ d }}" class="dialect-btn">{{ d }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
     {% if show_login_popup %}
         <div id="loginModal" class="modal-overlay">
             <div class="modal-content">
