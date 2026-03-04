@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
+{% endblock %}
+
+{% block title %}{{ flashcard.word }}{% endblock %}
+{% block content %}
+    <h1>{{ flashcard.word }}</h1>
+    <button id="flip" class='btn-primary'>Flip Card</button>
+
+    <div id="rearOfCard" style="display:none;">
+        <ul>
+            <li>{{ flashcard.pronunciation }}</li>
+            <li>{{ flashcard.definition }}</li>
+            <li>{{ flashcard.purpose }}</li>
+            <li>{{ flashcard.dialect }}</li>
+        </ul>
+    </div>
+
+    <script>
+        const flipButton = document.getElementById('flip')
+        const rearOfCard = document.getElementById('rearOfCard')
+
+        flipButton.addEventListener('click', function () {
+            if (rearOfCard.style.display === "none") rearOfCard.style.display = "block";
+            else rearOfCard.style.display = "none";
+        });
+    </script>
+{% endblock %}

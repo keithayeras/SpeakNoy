@@ -1,19 +1,20 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout
 from .forms import SignUpForm
 
-def signup(request):
+def signup_view(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect("/")
+            return redirect("/SpeakNoy")
     else:
         form = SignUpForm()
     return render(request, "accounts/signup.html", {"form": form})
 
-@login_required
-def dashboard(request):
-    return render(request, "dashboard.html")
+def logout_view(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect('accounts:login')
+    return redirect('SpeakNoy:cardlist')

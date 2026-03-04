@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import FlashcardListView, FlashcardDetailView
+from .views import flashcard_list_view, flashcard_detail_view
 
 urlpatterns = [
-    path("", FlashcardListView.as_view(), name="cardlist"),
-    path("<int:pk>/", FlashcardDetailView.as_view(), name="card"),
+    path("", flashcard_list_view, name="cardlist"),
+    path("<int:pk>/", flashcard_detail_view, name="card"),
 ]
 
 app_name = 'SpeakNoy'
