@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
+{% endblock %}
+
 {% block title %}{{ flashcard.word }}{% endblock %}
 {% block content %}
     <h1>{{ flashcard.word }}</h1>
-    <button id="flip">Flip Card</button>
+    <button id="flip" class='btn-primary'>Flip Card</button>
 
     <div id="rearOfCard" style="display:none;">
         <ul>

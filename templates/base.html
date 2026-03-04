@@ -10,6 +10,10 @@
     </head>
 
     <body>
+        <form action="{% url 'accounts:logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
         {% block content %}{% endblock %}
     </body>
 </html>

@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'flashcards/login_popup.css' %}">
+    <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
 {% endblock %}
 
 {% block title %}Flashcards{% endblock %}
@@ -26,7 +26,7 @@
                 <p>Which dialect would you like to learn today?</p>
                 <div class="dialect-grid">
                     {% for d in dialects %}
-                        <a href="?set_dialect={{ d }}" class="dialect-btn">{{ d }}</a>
+                        <a href="?set_dialect={{ d }}" class="btn-primary">{{ d }}</a>
                     {% endfor %}
                 </div>
             </div>
@@ -36,9 +36,9 @@
         <div id="loginModal" class="modal-overlay">
             <div class="modal-content">
                 <h3>Please Login to Continue</h3>
-                <p>You need an account to access the SpeakNoy dashboard.</p>
+                <p>You need an account to access the SpeakNoy dashboard.</p> <br>
                 
-                <a href="{% url 'accounts:login' %}" class="btn">Login</a>
+                <a href="{% url 'accounts:login' %}" class="btn-primary">Login</a>
                 <a href="{% url 'accounts:signup' %}" class="btn-secondary">Register</a>
             </div>
         </div>
