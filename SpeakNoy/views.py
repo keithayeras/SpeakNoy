@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Flashcard
+from .forms import FlashcardForm
 
 def flashcard_list_view(request):
     show_login_popup = False
@@ -34,3 +35,15 @@ def flashcard_detail_view(request, pk):
     flashcard = get_object_or_404(Flashcard, pk=pk)
     context = {'flashcard': flashcard}
     return render(request, "flashcards/flashcard_detail.html", context)
+
+def flashcard_create_view(request):
+    if request.method == 'POST':
+        form = FlashcardForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("cardlist")
+        
+    else:
+        form = FlashcardForm()
+    
+    return render(request, "flashcards/flashcard_create.html")
