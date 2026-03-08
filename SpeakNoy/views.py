@@ -40,10 +40,12 @@ def flashcard_create_view(request):
     if request.method == 'POST':
         form = FlashcardForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect("cardlist")
+            flashcard = form.save()
+            flashcard.dialect=request.session.get('selected_dialect')
+            flashcard.cardtype="Custom"
+            return redirect("SpeakNoy:cardlist")
         
     else:
         form = FlashcardForm()
     
-    return render(request, "flashcards/flashcard_create.html")
+    return render(request, "flashcards/flashcard_create.html", {"form": form})

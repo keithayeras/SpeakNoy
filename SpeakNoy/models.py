@@ -31,7 +31,7 @@ class Flashcard(models.Model):
     dialect = models.CharField(
         max_length=20,
         choices=DIALECT_CHOICES,
-        default=None
+        default="Cebuano"
     )
     cardtype = models.CharField(
         max_length=9,
