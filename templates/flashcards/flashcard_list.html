@@ -48,5 +48,5 @@
             <li><a href="{% url 'SpeakNoy:card' card.pk %}">{{ card.word }}</a></li>
         {% endfor %}
     </ul>
-    <a href="{% url 'SpeakNoy:cardcreate' %}">+ Add a new card...</a>
+    <a href="{% url 'SpeakNoy:cardcreate' %}" class="btn-primary">+ Add card</a>
 {% endblock %}
