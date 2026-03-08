@@ -37,15 +37,20 @@ def flashcard_detail_view(request, pk):
     return render(request, "flashcards/flashcard_detail.html", context)
 
 def flashcard_create_view(request):
+    selected_dialect = request.session.get('selected_dialect', "Cebuano")
+
     if request.method == 'POST':
         form = FlashcardForm(request.POST)
         if form.is_valid():
-            flashcard = form.save()
-            flashcard.dialect=request.session.get('selected_dialect')
-            flashcard.cardtype="Custom"
+            flashcard = form.save(commit=False)
+            flashcard.dialect = selected_dialect
+            flashcard.cardtype = "Custom"
+            flashcard.save()
             return redirect("SpeakNoy:cardlist")
-        
     else:
-        form = FlashcardForm()
+        form = FlashcardForm(initial={
+            'dialect': selected_dialect,
+            'cardtype': "Custom"
+        })
     
     return render(request, "flashcards/flashcard_create.html", {"form": form})
