@@ -68,3 +68,68 @@
 .logout-btn:hover {
     background-color: #c82333;
 }
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.btn-small {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    background: #007bff;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-small:hover {
+    background: #0056b3;
+}
+
+.review-header {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.review-header h1 {
+    margin: 0.5rem 0;
+}
+
+.review-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.review-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.review-card h3 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+.review-card p {
+    margin: 0.5rem 0;
+}

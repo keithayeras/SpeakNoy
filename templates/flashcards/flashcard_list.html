@@ -43,6 +43,24 @@
             </div>
         </div>
     {% endif %}
+    {% if show_review_popup %}
+        <div id="reviewModal" class="modal-overlay">
+            <div class="modal-content">
+                <h3>Ready for your daily review?</h3>
+                <p>Start learning {{ selected_dialect }} words today!</p>
+                <div class="modal-buttons">
+                    <a href="{% url 'SpeakNoy:daily_review' %}" class="btn-primary">Start Review</a>
+                    <button onclick="closeReviewModal()" class="btn-secondary">Skip for now</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function closeReviewModal() {
+                document.getElementById('reviewModal').style.display = 'none';
+            }
+        </script>
+    {% endif %}
     <ul>
         {% for card in flashcard %}
             <li><a href="{% url 'SpeakNoy:card' card.pk %}">{{ card.word }}</a></li>
