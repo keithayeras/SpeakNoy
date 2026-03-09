@@ -18,6 +18,9 @@
                 {% endfor %}
             </select>
         </form>
+        {% if can_review %}
+            <a href="{% url 'SpeakNoy:daily_review' %}" class="btn-review">Start Daily Review</a>
+        {% endif %}
     </div>
     {% if show_selection_prompt %}
         <div class="modal-overlay">

@@ -17,10 +17,7 @@
         {% for card in flashcard %}
             <div class="review-card">
                 <h3>{{ card.word }}</h3>
-                <p><strong>Pronunciation:</strong> {{ card.pronunciation }}</p>
-                <p><strong>Definition:</strong> {{ card.definition }}</p>
-                <p><strong>Type:</strong> {{ card.purpose }}</p>
-                <a href="{% url 'SpeakNoy:card' card.pk %}" class="btn-small">View Details</a>
+                <a href="{% url 'SpeakNoy:card' card.pk %}" class="btn-small">Review!</a>
             </div>
         {% empty %}
             <p>No words to review yet.</p>

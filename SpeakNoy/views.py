@@ -26,6 +26,11 @@ def flashcard_list_view(request):
     if request.user.is_authenticated and not selected_dialect:
         show_selection_prompt = True
     
+    # Check if user can still review today
+    today = str(date.today())
+    review_completed_date = request.session.get('review_completed_date')
+    can_review = selected_dialect and review_completed_date != today
+    
     flashcards = Flashcard.objects.all()
     if selected_dialect:
         flashcards = Flashcard.objects.filter(dialect=selected_dialect)
@@ -38,6 +43,7 @@ def flashcard_list_view(request):
         'show_selection_prompt': show_selection_prompt,
         'show_review_popup': show_review_popup,
         'selected_dialect': selected_dialect,
+        'can_review': can_review,
         'dialects': ['Cebuano', 'Ilocano']
     }
 
@@ -50,7 +56,14 @@ def flashcard_detail_view(request, pk):
 
 def daily_review_view(request):
     selected_dialect = request.session.get('selected_dialect')
-    flashcards = Flashcard.objects.filter(dialect=selected_dialect) if selected_dialect else []
+    
+    # Get all flashcards for the dialect and pick 5 random ones
+    all_flashcards = Flashcard.objects.filter(dialect=selected_dialect) if selected_dialect else []
+    flashcards = list(all_flashcards.order_by('?')[:5])
+    
+    # Mark review as completed for today
+    today = str(date.today())
+    request.session['review_completed_date'] = today
     
     context = {
         'selected_dialect': selected_dialect,
