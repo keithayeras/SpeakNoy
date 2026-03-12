@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
+{% endblock %}
+
+{% block title %}Daily Review - {{ selected_dialect }}{% endblock %}
+
+{% block content %}
+    <div class="review-header">
+        <h1>Daily Review: {{ selected_dialect }}</h1>
+        <p>Master these {{ flashcard|length }} words today</p>
+    </div>
+
+    <div class="review-cards">
+        {% for card in flashcard %}
+            <div class="review-card">
+                <h3>{{ card.word }}</h3>
+                <a href="{% url 'SpeakNoy:card' card.pk %}" class="btn-small">Review!</a>
+            </div>
+        {% empty %}
+            <p>No words to review yet.</p>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">Back to Flashcards</a>
+{% endblock %}

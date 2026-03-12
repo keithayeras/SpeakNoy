@@ -18,6 +18,12 @@
                 {% endfor %}
             </select>
         </form>
+        {% if can_review %}
+            <a href="{% url 'SpeakNoy:daily_review' %}" class="btn-review">Start Daily Review</a>
+        {% endif %}
+        {% if selected_dialect %}
+            <a href="{% url 'SpeakNoy:dialect_review' %}" class="btn-review">Let's review!</a>
+        {% endif %}
     </div>
     {% if show_selection_prompt %}
         <div class="modal-overlay">
@@ -42,6 +48,37 @@
                 <a href="{% url 'accounts:signup' %}" class="btn-secondary">Register</a>
             </div>
         </div>
+    {% endif %}
+    {% if show_review_popup or schedule_saved %}
+        <div id="reviewModal" class="modal-overlay">
+            <div class="modal-content">
+                {% if schedule_saved %}
+                    <h3>Schedule Updated</h3>
+                    <p>Your daily review reminder is set for <strong>{{ review_popup_time }}</strong> each day.</p>
+                {% else %}
+                    <h3>Ready for your daily review?</h3>
+                    <p>Start learning {{ selected_dialect }} words today!</p>
+                {% endif %}
+
+                <form method="post" class="schedule-form">
+                    {% csrf_token %}
+                    <label for="daily_review_time">Remind me daily at:</label>
+                    <input type="time" id="daily_review_time" name="daily_review_time" value="{{ review_popup_time|default:'' }}">
+                    <button type="submit" class="btn-secondary">Save reminder</button>
+                </form>
+
+                <div class="modal-buttons">
+                    <a href="{% url 'SpeakNoy:daily_review' %}" class="btn-primary">Start Review</a>
+                    <button onclick="closeReviewModal()" class="btn-secondary">Skip for now</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function closeReviewModal() {
+                document.getElementById('reviewModal').style.display = 'none';
+            }
+        </script>
     {% endif %}
     {% if user.is_authenticated %}
         <h2></h2>
