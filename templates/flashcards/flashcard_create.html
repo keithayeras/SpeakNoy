@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
+{% endblock %}
+
+{% block title %}Create a Custom Flashcard{% endblock %}
+{% block content %}
+    <h1>Create a Custom Flashcard</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Save card</button>
+    </form>
+{% endblock %}
