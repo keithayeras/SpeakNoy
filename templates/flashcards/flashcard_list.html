@@ -46,11 +46,24 @@
             </div>
         </div>
     {% endif %}
-    {% if show_review_popup %}
+    {% if show_review_popup or schedule_saved %}
         <div id="reviewModal" class="modal-overlay">
             <div class="modal-content">
-                <h3>Ready for your daily review?</h3>
-                <p>Start learning {{ selected_dialect }} words today!</p>
+                {% if schedule_saved %}
+                    <h3>Schedule Updated</h3>
+                    <p>Your daily review reminder is set for <strong>{{ review_popup_time }}</strong> each day.</p>
+                {% else %}
+                    <h3>Ready for your daily review?</h3>
+                    <p>Start learning {{ selected_dialect }} words today!</p>
+                {% endif %}
+
+                <form method="post" class="schedule-form">
+                    {% csrf_token %}
+                    <label for="daily_review_time">Remind me daily at:</label>
+                    <input type="time" id="daily_review_time" name="daily_review_time" value="{{ review_popup_time|default:'' }}">
+                    <button type="submit" class="btn-secondary">Save reminder</button>
+                </form>
+
                 <div class="modal-buttons">
                     <a href="{% url 'SpeakNoy:daily_review' %}" class="btn-primary">Start Review</a>
                     <button onclick="closeReviewModal()" class="btn-secondary">Skip for now</button>
