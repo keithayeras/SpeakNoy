@@ -250,3 +250,20 @@ class ListViewTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "This field is required")
+
+class FlashcardRemoveTest(TestCase):
+    def setUp(self):
+        self.customCard = Flashcard.objects.create(
+            word="Goku",
+            pronunciation="/Go-koo/",
+            definition="Solos your verse",
+            purpose="Noun",
+            dialect="Cebuano",
+            cardtype="Custom"
+        )
+
+    def test_custom_card_removal(self):
+        self.assertTrue(Flashcard.objects.filter(pk=self.customCard.pk).exists())
+        response = self.client.post(reverse("SpeakNoy:cardremove", args=[self.customCard.pk]), follow=True)
+        self.assertFalse(Flashcard.objects.filter(pk=self.customCard.pk).exists())
+        self.assertRedirects(response, reverse("SpeakNoy:cardlist"))
