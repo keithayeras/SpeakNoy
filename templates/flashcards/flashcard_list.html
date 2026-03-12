@@ -43,9 +43,14 @@
             </div>
         </div>
     {% endif %}
-    <ul>
+    {% if user.is_authenticated %}
+        <h2></h2>
+        <a href="{% url 'SpeakNoy:cardcreate' %}" class="btn-primary">+ Add card</a>
+    {% endif %}
+    <ul style="list-style: none; padding: 10px;">
         {% for card in flashcard %}
-            <li><a href="{% url 'SpeakNoy:card' card.pk %}">{{ card.word }}</a></li>
+            <h1></h1>
+            <li><a href="{% url 'SpeakNoy:card' card.pk %}" class="btn-card">{{ card.word }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}

@@ -7,16 +7,26 @@
 
 {% block title %}{{ flashcard.word }}{% endblock %}
 {% block content %}
-    <h1>{{ flashcard.word }}</h1>
-    <button id="flip" class='btn-primary'>Flip Card</button>
+    <div class="modal-overlay">
+            <div class="modal-content">
+                <h1>{{ flashcard.word }}</h1>
 
-    <div id="rearOfCard" style="display:none;">
-        <ul>
-            <li>{{ flashcard.pronunciation }}</li>
-            <li>{{ flashcard.definition }}</li>
-            <li>{{ flashcard.purpose }}</li>
-            <li>{{ flashcard.dialect }}</li>
-        </ul>
+                <div id="rearOfCard" style="display:none;">
+                    <ul style="list-style: none; padding: 0;">
+                        <li>{{ flashcard.pronunciation }}</li>
+                        <li>{{ flashcard.definition }}</li>
+                        <li>{{ flashcard.purpose }}</li>
+                        <li>{{ flashcard.dialect }}</li>
+                    </ul>
+                </div>
+                
+                <button id="flip" class='btn-primary'>Flip Card</button>
+                <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-close">⨉</a>
+                <form method="POST" action="{% url 'SpeakNoy:cardremove' flashcard.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" id="discard" class="btn-discard">Discard</button>
+                </form>
+        </div>
     </div>
 
     <script>
@@ -29,3 +39,21 @@
         });
     </script>
 {% endblock %}
+
+    <div class="modal-overlay">
+            <div class="modal-content">
+                <h1>{{ flashcard.word }}</h1>
+
+                <div id="rearOfCard" style="display:none;">
+                    <ul>
+                        <li>{{ flashcard.pronunciation }}</li>
+                        <li>{{ flashcard.definition }}</li>
+                        <li>{{ flashcard.purpose }}</li>
+                        <li>{{ flashcard.dialect }}</li>
+                    </ul>
+                </div>
+
+                <button id="flip" class='btn-primary'>Flip Card</button>
+                <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-close">⨉</a>
+            </div>
+        </div>
