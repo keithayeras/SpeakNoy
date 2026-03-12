@@ -115,3 +115,29 @@ def daily_review_view(request):
         'flashcard': flashcards,
     }
     return render(request, "flashcards/daily_review.html", context)
+
+
+def dialect_review_view(request):
+    """Review page that shows all cards for the selected dialect.
+
+    Includes an option to draw a random card via ?random=1.
+    """
+    selected_dialect = request.session.get('selected_dialect')
+    all_flashcards = Flashcard.objects.filter(dialect=selected_dialect) if selected_dialect else []
+
+    # Determine whether the user can still do their daily review today
+    today = str(date.today())
+    review_completed_date = request.session.get('review_completed_date')
+    can_review = selected_dialect and review_completed_date != today
+
+    random_card = None
+    if request.GET.get('random') and all_flashcards:
+        random_card = all_flashcards.order_by('?').first()
+
+    context = {
+        'selected_dialect': selected_dialect,
+        'flashcard': all_flashcards,
+        'random_card': random_card,
+        'can_review': can_review,
+    }
+    return render(request, "flashcards/dialect_review.html", context)

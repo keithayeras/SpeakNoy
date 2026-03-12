@@ -21,6 +21,9 @@
         {% if can_review %}
             <a href="{% url 'SpeakNoy:daily_review' %}" class="btn-review">Start Daily Review</a>
         {% endif %}
+        {% if selected_dialect %}
+            <a href="{% url 'SpeakNoy:dialect_review' %}" class="btn-review">Let's review!</a>
+        {% endif %}
     </div>
     {% if show_selection_prompt %}
         <div class="modal-overlay">
