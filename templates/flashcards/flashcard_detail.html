@@ -9,6 +9,7 @@
 {% block content %}
     <h1>{{ flashcard.word }}</h1>
     <button id="flip" class='btn-primary'>Flip Card</button>
+    <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-close">⨉</a>
 
     <div id="rearOfCard" style="display:none;">
         <ul>

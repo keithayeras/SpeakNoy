@@ -49,7 +49,8 @@
     {% endif %}
     <ul>
         {% for card in flashcard %}
-            <li><a href="{% url 'SpeakNoy:card' card.pk %}">{{ card.word }}</a></li>
+            <h1></h1>
+            <li><a href="{% url 'SpeakNoy:card' card.pk %}" class="btn-card">{{ card.word }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}
