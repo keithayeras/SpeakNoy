@@ -52,5 +52,12 @@ def flashcard_create_view(request):
             'dialect': selected_dialect,
             'cardtype': "Custom"
         })
-    
+
     return render(request, "flashcards/flashcard_create.html", {"form": form})
+
+def flashcard_remove(request, pk):
+    if request.method == 'POST':
+        flashcard = get_object_or_404(Flashcard, pk=pk)
+        flashcard.delete()
+
+    return redirect('SpeakNoy:cardlist')

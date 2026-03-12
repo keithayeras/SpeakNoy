@@ -69,6 +69,19 @@
     background-color: #c82333;
 }
 
+.btn-discard {
+    padding: 10px;
+    background: #dd3e0d;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+
+.btn-discard:hover {
+    transform: scale(1.05);
+}
+
 .btn-close {
     padding: 10px;
     background: #4d4d4d;
