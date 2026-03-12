@@ -43,10 +43,13 @@
             </div>
         </div>
     {% endif %}
+    {% if user.is_authenticated %}
+        <h2></h2>
+        <a href="{% url 'SpeakNoy:cardcreate' %}" class="btn-primary">+ Add card</a>
+    {% endif %}
     <ul>
         {% for card in flashcard %}
             <li><a href="{% url 'SpeakNoy:card' card.pk %}">{{ card.word }}</a></li>
         {% endfor %}
     </ul>
-    <a href="{% url 'SpeakNoy:cardcreate' %}" class="btn-primary">+ Add card</a>
 {% endblock %}
