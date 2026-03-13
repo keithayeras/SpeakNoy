@@ -84,10 +84,17 @@
         <h2></h2>
         <a href="{% url 'SpeakNoy:cardcreate' %}" class="btn-primary">+ Add card</a>
     {% endif %}
-    <ul style="list-style: none; padding: 10px;">
+    <div class="review-cards">
         {% for card in flashcard %}
-            <h1></h1>
-            <li><a href="{% url 'SpeakNoy:card' card.pk %}" class="btn-card">{{ card.word }}</a></li>
+            <div class="review-card">
+                <form method="GET" action="{% url 'SpeakNoy:card' card.pk %}">
+                    <button class="review-card"><h3>{{ card.word }}</h3></button>
+                </form>
+            </div>
+        {% empty %}
+            <p>No words to review yet.</p>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}
+
+    
