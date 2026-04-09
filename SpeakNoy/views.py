@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Flashcard
+from .models import *
 from datetime import date, datetime
-from .forms import FlashcardForm
+from .forms import *
 
 def flashcard_list_view(request):
     show_login_popup = False
@@ -169,3 +169,36 @@ def flashcard_remove(request, pk):
         flashcard.delete()
 
     return redirect('SpeakNoy:cardlist')
+
+def collection_list_view(request):
+    collections = FlashcardCollection.objects.all()
+    return render(request, "flashcards/collection_list.html", {"collections": collections})
+
+def collection_detail_view(request, pk):
+    collection = get_object_or_404(FlashcardCollection, pk=pk)
+    return render(request, "flashcards/collection_detail.html", {"collection": collection})
+
+def collection_create_view(request):
+    if request.method == 'POST':
+        form = FlashcardCollectionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("SpeakNoy:collection_list")
+    else:
+        form = FlashcardCollectionForm()
+    return render(request, "flashcards/collection_create.html", {"form": form})
+
+def collection_add_card(request, pk):
+    flashcard = get_object_or_404(Flashcard, pk=pk)
+    if request.method == 'POST':
+        form = AddToCollectionForm(request.POST)
+        if form.is_valid():
+            collection = form.cleaned_data['collection']
+            collection.flashcards.add(flashcard)
+            return redirect("SpeakNoy:card", pk=flashcard.pk)
+    else:
+        form = AddToCollectionForm()
+    return render(request, "flashcards/add_to_collection.html", {
+        "form": form,
+        "flashcard": flashcard
+    })
