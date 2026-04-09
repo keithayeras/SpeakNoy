@@ -3,7 +3,10 @@ from django.utils import timezone
 from .models import *
 from datetime import date, datetime
 from .forms import *
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
+@login_required
 def flashcard_list_view(request):
     show_login_popup = False
     if not request.user.is_authenticated:
@@ -75,11 +78,9 @@ def flashcard_list_view(request):
                 show_review_popup = True
                 request.session['review_popup_shown_date'] = today
 
-    flashcards = Flashcard.objects.all()
+    flashcards = Flashcard.objects.filter(Q(creator=request.user) | Q(is_public=True))
     if selected_dialect:
-        flashcards = Flashcard.objects.filter(dialect=selected_dialect)
-    else:
-        flashcards = Flashcard.objects.none()
+        flashcards = flashcards.filter(dialect=selected_dialect)
 
     context = {
         'show_login_popup': show_login_popup,
@@ -100,12 +101,16 @@ def flashcard_detail_view(request, pk):
     context = {'flashcard': flashcard}
     return render(request, "flashcards/flashcard_detail.html", context)
 
+@login_required
 def daily_review_view(request):
     selected_dialect = request.session.get('selected_dialect')
-    
     # Get all flashcards for the dialect and pick 5 random ones
-    all_flashcards = Flashcard.objects.filter(dialect=selected_dialect) if selected_dialect else []
-    flashcards = list(all_flashcards.order_by('?')[:5])
+    all_flashcards = Flashcard.objects.filter(Q(creator=request.user) | Q(is_public=True))
+    if selected_dialect:
+        select_flashcards = all_flashcards.filter(dialect=selected_dialect) if selected_dialect else []
+        flashcards = list(select_flashcards.order_by('?')[:5])
+    else:
+        flashcards = []
     
     # Mark review as completed for today
     today = str(date.today())
@@ -117,14 +122,18 @@ def daily_review_view(request):
     }
     return render(request, "flashcards/daily_review.html", context)
 
-
+@login_required
 def dialect_review_view(request):
     """Review page that shows all cards for the selected dialect.
 
     Includes an option to draw a random card via ?random=1.
     """
     selected_dialect = request.session.get('selected_dialect')
-    all_flashcards = Flashcard.objects.filter(dialect=selected_dialect) if selected_dialect else []
+    all_flashcards = Flashcard.objects.filter(Q(creator=request.user) | Q(is_public=True))
+    if selected_dialect:
+        select_flashcards = all_flashcards.filter(dialect=selected_dialect) if selected_dialect else []
+    else:
+        flashcards = []
 
     # Determine whether the user can still do their daily review today
     today = str(date.today())
@@ -137,13 +146,13 @@ def dialect_review_view(request):
 
     context = {
         'selected_dialect': selected_dialect,
-        'flashcard': all_flashcards,
+        'flashcard': select_flashcards,
         'random_card': random_card,
         'can_review': can_review,
     }
     return render(request, "flashcards/dialect_review.html", context)
 
-
+@login_required
 def flashcard_create_view(request):
     selected_dialect = request.session.get('selected_dialect', "Cebuano")
 
@@ -153,6 +162,7 @@ def flashcard_create_view(request):
             flashcard = form.save(commit=False)
             flashcard.dialect = selected_dialect
             flashcard.cardtype = "Custom"
+            flashcard.creator = request.user
             flashcard.save()
             return redirect("SpeakNoy:cardlist")
     else:
@@ -171,18 +181,22 @@ def flashcard_remove(request, pk):
     return redirect('SpeakNoy:cardlist')
 
 def collection_list_view(request):
-    collections = FlashcardCollection.objects.all()
+    collections = FlashcardCollection.objects.filter(creator=request.user)
     return render(request, "flashcards/collection_list.html", {"collections": collections})
 
 def collection_detail_view(request, pk):
     collection = get_object_or_404(FlashcardCollection, pk=pk)
     return render(request, "flashcards/collection_detail.html", {"collection": collection})
 
+@login_required
 def collection_create_view(request):
     if request.method == 'POST':
         form = FlashcardCollectionForm(request.POST)
         if form.is_valid():
-            form.save()
+            collection = form.save(commit=False)
+            collection.creator = request.user
+            collection.save()
+            print('hello?')
             return redirect("SpeakNoy:collectionlist")
     else:
         form = FlashcardCollectionForm()
@@ -202,3 +216,88 @@ def collection_add_card(request, pk):
         "form": form,
         "flashcard": flashcard
     })
+
+def publicspace_view(request):
+    publicspace, _ = PublicSpace.objects.get_or_create(name="Public Space")
+
+    if publicspace:
+        collections = publicspace.collections.all()
+        flashcards = publicspace.flashcards.all()
+    else:
+        collections = []
+        flashcards = []
+
+    context = {
+        "publicspace_collections": collections,
+        "publicspace_cards": flashcards,
+    }
+
+    return render(request, "flashcards/publicspace.html", context)
+
+def publicspace_upload_card(request, pk):
+    flashcard = get_object_or_404(Flashcard, pk=pk)
+    publicspace_cards, created = PublicSpace.objects.get_or_create(name="Public Space")
+    if publicspace_cards:
+        publicspace_cards.flashcards.add(flashcard)
+        return redirect("SpeakNoy:publicspace")
+    else:
+        return redirect("SpeakNoy:cardlist")
+
+def publicspace_upload_collection(request, pk):
+    collection = get_object_or_404(FlashcardCollection, pk=pk)
+    publicspace_collections, created = PublicSpace.objects.get_or_create(name="Public Space")
+    if publicspace_collections:
+        publicspace_collections.collections.add(collection)
+        return redirect("SpeakNoy:publicspace")
+    else:
+        return redirect("SpeakNoy:collectionlist")
+
+def publicspace_save_card(request, pk):
+    flashcard = get_object_or_404(Flashcard, pk=pk)
+    saved_card = Flashcard.objects.create(
+        word = flashcard.word,
+        pronunciation = flashcard.pronunciation,
+        definition = flashcard.definition,
+        purpose = flashcard.purpose,
+        dialect = flashcard.dialect,
+        cardtype = "Custom",
+        creator = request.user,
+    )
+    return redirect("SpeakNoy:cardlist")
+
+def publicspace_save_collection(request, pk):
+    collection = get_object_or_404(FlashcardCollection, pk=pk)
+    saved_collection = FlashcardCollection.objects.create(
+        name = collection.name,
+        creator = request.user,
+    )
+    for flashcard in collection.flashcards.all():
+        saved_card = Flashcard.objects.create(
+            word = flashcard.word,
+            pronunciation = flashcard.pronunciation,
+            definition = flashcard.definition,
+            purpose = flashcard.purpose,
+            dialect = flashcard.dialect,
+            cardtype = "Custom",
+            creator = request.user,
+        )
+        saved_collection.flashcards.add(saved_card)
+    return redirect("SpeakNoy:cardlist")
+
+def publicspace_remove_card(request, pk):
+    flashcard = get_object_or_404(Flashcard, pk=pk)
+    publicspace_cards, created = PublicSpace.objects.get_or_create(name="Public Space")
+    if publicspace_cards:
+        publicspace_cards.flashcards.remove(flashcard)
+        return redirect("SpeakNoy:publicspace")
+    else:
+        return redirect("SpeakNoy:cardlist")
+
+def publicspace_remove_collection(request, pk):
+    collection = get_object_or_404(FlashcardCollection, pk=pk)
+    publicspace_collections, created = PublicSpace.objects.get_or_create(name="Public Space")
+    if publicspace_collections:
+        publicspace_collections.collections.remove(collection)
+        return redirect("SpeakNoy:publicspace")
+    else:
+        return redirect("SpeakNoy:collectionlist")

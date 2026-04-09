@@ -22,3 +22,8 @@ class AddToCollectionForm(forms.Form):
         queryset=FlashcardCollection.objects.all(),
         label="Choose which collection your card will be in"
     )
+
+class PublicSpaceForm(ModelForm):
+    class Meta:
+        model = PublicSpace
+        fields = ['name']
