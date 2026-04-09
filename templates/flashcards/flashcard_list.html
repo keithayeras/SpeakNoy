@@ -89,9 +89,9 @@
     <div class="review-cards">
         {% for card in flashcard %}
             <div class="review-card">
-                <form method="GET" action="{% url 'SpeakNoy:card' card.pk %}">
-                    <button class="review-card"><h3>{{ card.word }}</h3></button>
-                </form>
+                <a href="{% url 'SpeakNoy:card' card.pk %}">
+                    <h3>{{ card.word }}</h3>
+                </a>
             </div>
         {% empty %}
             <p>No words to review yet.</p>
