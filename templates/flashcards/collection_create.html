@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'flashcards/style.css' %}">{% endblock %}
+{% block title %}Create a new Collection{% endblock %}
+{% block content %}
+    <h1>Create a new Collectionn</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Create Collection</button>
+    </form>
+{% endblock %}

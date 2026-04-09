@@ -183,7 +183,7 @@ def collection_create_view(request):
         form = FlashcardCollectionForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("SpeakNoy:collection_list")
+            return redirect("SpeakNoy:collectionlist")
     else:
         form = FlashcardCollectionForm()
     return render(request, "flashcards/collection_create.html", {"form": form})

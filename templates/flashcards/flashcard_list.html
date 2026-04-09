@@ -83,6 +83,7 @@
     {% if user.is_authenticated %}
         <h2></h2>
         <a href="{% url 'SpeakNoy:cardcreate' %}" class="btn-primary">+ Add card</a>
+        <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-primary">View Collections</a>
     {% endif %}
     <div class="review-cards">
         {% for card in flashcard %}
