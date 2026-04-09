@@ -8,5 +8,6 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Create Collection</button>
+        <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">⨉ Cancel</a>
     </form>
 {% endblock %}

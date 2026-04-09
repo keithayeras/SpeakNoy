@@ -8,7 +8,7 @@
     <div class="review-cards">
         {% for flashcard in collection.flashcards.all %}
             <div class="review-card">
-                <a href="{% url 'SpeakNoy:card' card.pk %}">
+                <a href="{% url 'SpeakNoy:card' flashcard.pk %}">
                     <h3>{{ flashcard.word }}</h3>
                 </a>
             </div>

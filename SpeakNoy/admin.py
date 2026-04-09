@@ -3,7 +3,9 @@ from .models import *
 
 class FlashcardAdmin(admin.ModelAdmin):
     model = Flashcard
-class 
+class FlashcardCollectionAdmin(admin.ModelAdmin):
+    model = FlashcardCollection
 
 # Register your models here.
 admin.site.register(Flashcard, FlashcardAdmin)
+admin.site.register(FlashcardCollection, FlashcardCollectionAdmin)

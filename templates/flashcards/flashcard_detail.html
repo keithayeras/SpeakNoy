@@ -21,7 +21,7 @@
                 </div>
                 
                 <button id="flip" class='btn-primary'>Flip Card</button>
-                <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-close">⨉</a>
+                <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-close">⨉ Close Card</a>
                 <a href="{% url 'SpeakNoy:add_to_collection' flashcard.pk %}" class="btn-primary">Add to Collection...</a>
                 {% if flashcard.cardtype == "Custom" %}
                     <form method="POST" action="{% url 'SpeakNoy:cardremove' flashcard.pk %}">

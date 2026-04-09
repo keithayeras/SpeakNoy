@@ -13,6 +13,7 @@
         <h2></h2>
         <a href="{% url 'SpeakNoy:collectioncreate' %}" class="btn-primary">+ Create collection</a>
     {% endif %}
+    <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">← Back to Flashcards</a>
     <div class="review-cards">
         {% for collection in collections %}
             <div class="review-card">
