@@ -41,3 +41,15 @@ class Flashcard(models.Model):
 
     def __str__(self):
         return self.word
+    
+
+class FlashcardCollection(models.Model):
+    name = models.CharField(max_length=63)
+    flashcards = models.ManyToManyField(
+        Flashcard,
+        blank=True,
+        related_name='collections'
+    )
+
+    def __str__(self):
+        return self.name
