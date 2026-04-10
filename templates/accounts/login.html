@@ -1,7 +1,18 @@
-<h1>Login</h1>
+{% load static %}
+<link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
+<div class="login-page">
+    <div class="login-card">
+
+        <h1>SpeakNoy</h1>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn-primary">Login</button>
+        </form>
+        <a href="/accounts/signup/">Register an account</a>
+
+    </div>
+</div>
