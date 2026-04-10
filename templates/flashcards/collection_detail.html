@@ -8,6 +8,7 @@
     <a href="{% url 'SpeakNoy:publicspace-upload-collection' collection.pk %}" class="btn-primary">Add to Public Space</a>
     <a href="{% url 'SpeakNoy:publicspace-save-collection' collection.pk %}" class="btn-primary">Save Collection</a>
     <a href="{% url 'SpeakNoy:publicspace-remove-collection' collection.pk %}" class="btn-primary">Remove from Public Space</a>
+    <a href="{% url 'SpeakNoy:collectionremove' collection.pk %}" class="btn-primary">Remove Collection</a>
     <div class="review-cards">
         {% for flashcard in collection.flashcards.all %}
             <div class="review-card">
