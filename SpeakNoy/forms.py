@@ -1,5 +1,6 @@
+from django import forms
 from django.forms import ModelForm
-from .models import Flashcard
+from .models import *
 
 class FlashcardForm(ModelForm):
     class Meta:
@@ -10,3 +11,19 @@ class FlashcardForm(ModelForm):
             'definition',
             'purpose',
             ]
+        
+class FlashcardCollectionForm(ModelForm):
+    class Meta:
+        model = FlashcardCollection
+        fields = ['name']
+
+class AddToCollectionForm(forms.Form):
+    collection = forms.ModelChoiceField(
+        queryset=FlashcardCollection.objects.all(),
+        label="Choose which collection your card will be in"
+    )
+
+class PublicSpaceForm(ModelForm):
+    class Meta:
+        model = PublicSpace
+        fields = ['name']

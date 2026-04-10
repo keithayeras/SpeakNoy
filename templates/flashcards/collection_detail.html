@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'flashcards/style.css' %}">{% endblock %}
+{% block title %}{{ collection.name }}{% endblock %}
+{% block content %}
+    <h1>{{ collection.name }}</h1>
+    <p>{{ collection.flashcards.count }} card{{ collection.flashcards.count|pluralize }}</p>
+    <a href="{% url 'SpeakNoy:publicspace-upload-collection' collection.pk %}" class="btn-primary">Add to Public Space</a>
+    <a href="{% url 'SpeakNoy:publicspace-save-collection' collection.pk %}" class="btn-primary">Save Collection</a>
+    <a href="{% url 'SpeakNoy:publicspace-remove-collection' collection.pk %}" class="btn-primary">Remove from Public Space</a>
+    <div class="review-cards">
+        {% for flashcard in collection.flashcards.all %}
+            <div class="review-card">
+                <a href="{% url 'SpeakNoy:card' flashcard.pk %}">
+                    <h3>{{ flashcard.word }}</h3>
+                </a>
+            </div>
+        {% empty %}
+            <p>There are no flashcards in this collection yet.</p>
+            <p>Add your cards to the collection by clicking <b>Add to Collection</b> while viewing a card.</p>
+        {% endfor %}
+    </div>
+    <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">← Back to Collections</a>
+{% endblock %}

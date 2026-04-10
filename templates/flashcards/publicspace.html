@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
+{% endblock %}
+
+{% block title %}Public Space{% endblock %}
+
+{% block content %}
+    <h1>Public Space</h1>
+    {% if user.is_authenticated %}
+        <h2></h2>
+    {% endif %}
+    <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">← Back to Flashcards</a>
+    <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">← Back to Collections</a>
+    <h2>Collections</h2>
+    <div class="review-cards">
+        {% for collection in publicspace_collections %}
+            <div class="review-card">
+                <a href="{% url 'SpeakNoy:collection' collection.pk %}">
+                    <h3>{{ collection.name }}</h3>
+                    <p>{{ collection.flashcards.count }} card{{ collection.flashcards.count|pluralize }}</p>
+                </a>
+            </div>
+        {% empty %}
+            <p>No collections so far in the public space.</p>
+        {% endfor %}
+    </div>
+    <h2>Flashcards</h2>
+    <div class="review-cards">
+        {% for card in publicspace_cards %}
+            <div class="review-card">
+                <a href="{% url 'SpeakNoy:card' card.pk %}">
+                    <h3>{{ card.word }}</h3>
+                </a>
+            </div>
+        {% empty %}
+            <p>No flashcards so far in the public space.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

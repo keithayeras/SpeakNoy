@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
+{% endblock %}
+
+{% block title %}Collections{% endblock %}
+
+{% block content %}
+    <h1>Collections</h1>
+    {% if user.is_authenticated %}
+        <h2></h2>
+        <a href="{% url 'SpeakNoy:collectioncreate' %}" class="btn-primary">+ Create collection</a>
+    {% endif %}
+    <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">← Back to Flashcards</a>
+    <div class="review-cards">
+        {% for collection in collections %}
+            <div class="review-card">
+                <a href="{% url 'SpeakNoy:collection' collection.pk %}">
+                    <h3>{{ collection.name }}</h3>
+                    <p>{{ collection.flashcards.count }} card{{ collection.flashcards.count|pluralize }}</p>
+                </a>
+            </div>
+        {% empty %}
+            <p>You have no collections yet. Click on the <b>Create collection</b> button to begin.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
