@@ -7,8 +7,8 @@
 
 {% block title %}{{ flashcard.word }}{% endblock %}
 {% block content %}
-    <div class="modal-overlay">
-            <div class="modal-content">
+    <div class="modal-overlay" id="fcOverlay">
+            <div class="modal-content" onclick="event.stopPropagation()">
                 <h1>{{ flashcard.word }}</h1>
 
                 <div id="rearOfCard" style="display:none;">
@@ -20,7 +20,6 @@
                     </ul>
                 </div>
                 
-                <button id="flip" class='btn-primary'>Flip Card</button>
                 <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-close">⨉ Close Card</a>
                 <a href="{% url 'SpeakNoy:add_to_collection' flashcard.pk %}" class="btn-primary">Add to Collection...</a>
                 <a href="{% url 'SpeakNoy:publicspace-upload-card' flashcard.pk %}" class="btn-primary">Add to Public Space</a>
@@ -36,7 +35,7 @@
     </div>
 
     <script>
-        const flipButton = document.getElementById('flip')
+        const flipButton = document.getElementById('fcOverlay')
         const rearOfCard = document.getElementById('rearOfCard')
 
         flipButton.addEventListener('click', function () {
