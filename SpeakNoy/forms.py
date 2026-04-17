@@ -23,6 +23,12 @@ class AddToCollectionForm(forms.Form):
         label="Choose which collection your card will be in"
     )
 
+class RemoveFromCollectionForm(forms.Form):
+    collection = forms.ModelChoiceField(
+        queryset=FlashcardCollection.objects.all(),
+        label="Choose which collection you would like to remove the card from"
+    )
+
 class PublicSpaceForm(ModelForm):
     class Meta:
         model = PublicSpace

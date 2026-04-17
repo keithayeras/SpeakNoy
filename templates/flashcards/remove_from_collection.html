@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'flashcards/style.css' %}">{% endblock %}
+{% block title %}Remove Card from Collection{% endblock %}
+{% block content %}
+    <h1>Which collection do you want to remove "{{ flashcard.word }}" from?</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Remove from Collection</button>
+    </form>
+    <h2></h2>
+    <a href="{% url 'SpeakNoy:card' flashcard.pk %}" class="btn-secondary">⨉ Cancel</a>
+{% endblock %}

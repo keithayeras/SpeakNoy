@@ -217,6 +217,27 @@ def collection_add_card(request, pk):
         "flashcard": flashcard
     })
 
+@login_required
+def collection_remove_view(request, pk):
+    collection = get_object_or_404(FlashcardCollection, pk=pk)
+    collection.delete()
+    return redirect("SpeakNoy:collectionlist")
+
+def collection_remove_card(request, pk):
+    flashcard = get_object_or_404(Flashcard, pk=pk)
+    if request.method == 'POST':
+        form = RemoveFromCollectionForm(request.POST)
+        if form.is_valid():
+            collection = form.cleaned_data['collection']
+            collection.flashcards.remove(flashcard)
+            return redirect("SpeakNoy:card", pk=flashcard.pk)
+    else:
+        form = RemoveFromCollectionForm()
+    return render(request, "flashcards/remove_from_collection.html", {
+        "form": form,
+        "flashcard": flashcard
+    })
+    
 def publicspace_view(request):
     publicspace, _ = PublicSpace.objects.get_or_create(name="Public Space")
 

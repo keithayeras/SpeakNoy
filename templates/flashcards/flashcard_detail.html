@@ -4,6 +4,7 @@
 {% block title %}{{ flashcard.word }}{% endblock %}
 
 {% block content %}
+    <p>Click outside the card to flip it!</p>
     <div class="modal-overlay" id="fcOverlay">
         <div class="modal-content flashcard-modal" onclick="event.stopPropagation()">
             <div class="flashcard-topbar">

@@ -3,3 +3,6 @@
 *.DS_Store
 desktop.ini
 .venv/
+*.sqlite3
+*.sqlite
+db.sqlite3
