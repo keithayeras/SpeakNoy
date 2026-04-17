@@ -1,13 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'flashcards/style.css' %}">{% endblock %}
-{% block title %}Create a new Collection{% endblock %}
+
+{% block title %}Create a New Collection{% endblock %}
+
 {% block content %}
-    <h1>Create a new Collectionn</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Create Collection</button>
-        <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">⨉ Cancel</a>
-    </form>
+    <div class="form-shell">
+        <div class="form-card">
+            <span class="badge badge-soft">New collection</span>
+            <h1 style="margin-top: 0.7rem;">Create a new collection</h1>
+            <p style="margin-top: 0.55rem;">Group your flashcards into themed sets such as greetings, food, travel, or regional expressions.</p>
+
+            <form method="post" style="margin-top: 1.25rem;">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Create collection</button>
+                    <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}

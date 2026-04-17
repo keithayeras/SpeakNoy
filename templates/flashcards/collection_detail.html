@@ -1,25 +1,50 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'flashcards/style.css' %}">{% endblock %}
+
 {% block title %}{{ collection.name }}{% endblock %}
+
 {% block content %}
-    <h1>{{ collection.name }}</h1>
-    <p>{{ collection.flashcards.count }} card{{ collection.flashcards.count|pluralize }}</p>
-    <a href="{% url 'SpeakNoy:publicspace-upload-collection' collection.pk %}" class="btn-primary">Add to Public Space</a>
-    <a href="{% url 'SpeakNoy:publicspace-save-collection' collection.pk %}" class="btn-primary">Save Collection</a>
-    <a href="{% url 'SpeakNoy:publicspace-remove-collection' collection.pk %}" class="btn-primary">Remove from Public Space</a>
-    <a href="{% url 'SpeakNoy:collectionremove' collection.pk %}" class="btn-primary">Remove Collection</a>
-    <div class="review-cards">
-        {% for flashcard in collection.flashcards.all %}
-            <div class="review-card">
-                <a href="{% url 'SpeakNoy:card' flashcard.pk %}">
-                    <h3>{{ flashcard.word }}</h3>
-                </a>
+    <section class="page-section">
+        <div class="page-header">
+            <div class="page-header-main">
+                <span class="badge badge-soft">Collection</span>
+                <h1 style="margin-top: 0.65rem;">{{ collection.name }}</h1>
+                <p style="margin-top: 0.55rem;">{{ collection.flashcards.count }} card{{ collection.flashcards.count|pluralize }} in this study set.</p>
             </div>
-        {% empty %}
-            <p>There are no flashcards in this collection yet.</p>
-            <p>Add your cards to the collection by clicking <b>Add to Collection</b> while viewing a card.</p>
-        {% endfor %}
-    </div>
-    <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">← Back to Collections</a>
+            <div class="page-actions">
+                <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">Back to collections</a>
+            </div>
+        </div>
+
+        <div class="page-actions">
+            <a href="{% url 'SpeakNoy:publicspace-upload-collection' collection.pk %}" class="btn-primary">Add to public space</a>
+            <a href="{% url 'SpeakNoy:publicspace-save-collection' collection.pk %}" class="btn-secondary">Save collection</a>
+            <a href="{% url 'SpeakNoy:publicspace-remove-collection' collection.pk %}" class="btn-secondary">Remove from public space</a>
+        </div>
+    </section>
+
+    <section class="section-block">
+        <div class="section-intro">
+            <div>
+                <h2>Cards in this collection</h2>
+                <p>Open a card to study its details or add more cards from your flashcard library.</p>
+            </div>
+        </div>
+
+        <div class="review-cards">
+            {% for flashcard in collection.flashcards.all %}
+                <div class="review-card">
+                    <a href="{% url 'SpeakNoy:card' flashcard.pk %}">
+                        <h3>{{ flashcard.word }}</h3>
+                        <p>Open flashcard</p>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <h3>No flashcards here yet</h3>
+                    <p>Add cards to this collection while viewing a flashcard and selecting <strong>Add to collection</strong>.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
 {% endblock %}

@@ -1,24 +1,34 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
-{% endblock %}
-
 {% block title %}Review All - {{ selected_dialect }}{% endblock %}
 
 {% block content %}
     <div class="review-header">
-        <h1>Review All: {{ selected_dialect }}</h1>
-        <p>Master these {{ flashcard|length }} words today.</p>
+        <div>
+            <span class="badge badge-soft">Full review</span>
+            <h1 style="margin-top: 0.65rem;">Review All: {{ selected_dialect }}</h1>
+            <p style="margin-top: 0.55rem;">Work through all {{ flashcard|length }} words in this dialect and strengthen your retention.</p>
+        </div>
+        <div class="page-actions">
+            {% if can_review %}
+                <a href="{% url 'SpeakNoy:daily_review' %}" class="btn-primary">Daily review</a>
+            {% endif %}
+            <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">Back to flashcards</a>
+        </div>
     </div>
 
     {% if random_card %}
         <div class="random-card">
-            <h2>Random Card</h2>
-            <div class="review-card">
+            <span class="badge badge-soft">Try this first</span>
+            <h2 style="margin-top: 0.7rem;">Random card</h2>
+            <p style="margin-top: 0.5rem;">Start with a surprise word to warm up your review session.</p>
+            <div class="review-card" style="margin-top: 1rem;">
                 <h3>{{ random_card.word }}</h3>
-                <a href="{% url 'SpeakNoy:card' random_card.pk %}" class="btn-small">Review!</a>
+                <p>Open the random flashcard and test your memory.</p>
+                <div class="card-foot">
+                    <a href="{% url 'SpeakNoy:card' random_card.pk %}" class="btn-small">Review</a>
+                </div>
             </div>
         </div>
     {% endif %}
@@ -27,17 +37,16 @@
         {% for card in flashcard %}
             <div class="review-card">
                 <h3>{{ card.word }}</h3>
-                <a href="{% url 'SpeakNoy:card' card.pk %}" class="btn-small">Review!</a>
+                <p>Continue reviewing this word.</p>
+                <div class="card-foot">
+                    <a href="{% url 'SpeakNoy:card' card.pk %}" class="btn-small">Review</a>
+                </div>
             </div>
         {% empty %}
-            <p>No words to review yet.</p>
+            <div class="empty-state">
+                <h3>No words to review yet</h3>
+                <p>Select a dialect and start building your study list.</p>
+            </div>
         {% endfor %}
-    </div>
-
-    <div class="review-footer">
-        {% if can_review %}
-            <a href="{% url 'SpeakNoy:daily_review' %}" class="btn-primary">Daily Review</a>
-        {% endif %}
-        <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">← Back to Flashcards</a>
     </div>
 {% endblock %}

@@ -1,42 +1,68 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
-{% endblock %}
-
 {% block title %}Public Space{% endblock %}
 
 {% block content %}
-    <h1>Public Space</h1>
-    {% if user.is_authenticated %}
-        <h2></h2>
-    {% endif %}
-    <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">← Back to Flashcards</a>
-    <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">← Back to Collections</a>
-    <h2>Collections</h2>
-    <div class="review-cards">
-        {% for collection in publicspace_collections %}
-            <div class="review-card">
-                <a href="{% url 'SpeakNoy:collection' collection.pk %}">
-                    <h3>{{ collection.name }}</h3>
-                    <p>{{ collection.flashcards.count }} card{{ collection.flashcards.count|pluralize }}</p>
-                </a>
-            </div>
-        {% empty %}
-            <p>No collections so far in the public space.</p>
-        {% endfor %}
+    <div class="page-header">
+        <div class="page-header-main">
+            <span class="badge badge-soft">Community space</span>
+            <h1 style="margin-top: 0.65rem;">Public Space</h1>
+            <p style="margin-top: 0.6rem;">Browse shared collections and flashcards from the SpeakNoy community and discover more ways to learn Filipino dialects.</p>
+        </div>
+        <div class="page-actions">
+            <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">Back to flashcards</a>
+            <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">Back to collections</a>
+        </div>
     </div>
-    <h2>Flashcards</h2>
-    <div class="review-cards">
-        {% for card in publicspace_cards %}
-            <div class="review-card">
-                <a href="{% url 'SpeakNoy:card' card.pk %}">
-                    <h3>{{ card.word }}</h3>
-                </a>
+
+    <section class="section-block">
+        <div class="section-intro">
+            <div>
+                <h2>Shared collections</h2>
+                <p>Explore curated sets contributed by other learners.</p>
             </div>
-        {% empty %}
-            <p>No flashcards so far in the public space.</p>
-        {% endfor %}
-    </div>
+        </div>
+
+        <div class="review-cards">
+            {% for collection in publicspace_collections %}
+                <div class="review-card">
+                    <a href="{% url 'SpeakNoy:collection' collection.pk %}">
+                        <h3>{{ collection.name }}</h3>
+                        <p>{{ collection.flashcards.count }} card{{ collection.flashcards.count|pluralize }}</p>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <h3>No public collections yet</h3>
+                    <p>Once learners begin sharing study sets, they will appear here.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="section-block">
+        <div class="section-intro">
+            <div>
+                <h2>Shared flashcards</h2>
+                <p>See individual words and phrases available in the public library.</p>
+            </div>
+        </div>
+
+        <div class="review-cards">
+            {% for card in publicspace_cards %}
+                <div class="review-card">
+                    <a href="{% url 'SpeakNoy:card' card.pk %}">
+                        <h3>{{ card.word }}</h3>
+                        <p>Open flashcard</p>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <h3>No public flashcards yet</h3>
+                    <p>Shared words and phrases will appear here once the community starts contributing.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
 {% endblock %}
