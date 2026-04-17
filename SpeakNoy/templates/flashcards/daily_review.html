@@ -1,28 +1,34 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
-{% endblock %}
-
 {% block title %}Daily Review - {{ selected_dialect }}{% endblock %}
 
 {% block content %}
     <div class="review-header">
-        <h1>Daily Review: {{ selected_dialect }}</h1>
-        <p>Master these {{ flashcard|length }} words today</p>
+        <div>
+            <span class="badge badge-soft">Daily practice</span>
+            <h1 style="margin-top: 0.65rem;">Daily Review: {{ selected_dialect }}</h1>
+            <p style="margin-top: 0.55rem;">Master these {{ flashcard|length }} words today with a short, focused review session.</p>
+        </div>
+        <div class="page-actions">
+            <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">Back to flashcards</a>
+        </div>
     </div>
 
     <div class="review-cards">
         {% for card in flashcard %}
             <div class="review-card">
                 <h3>{{ card.word }}</h3>
-                <a href="{% url 'SpeakNoy:card' card.pk %}" class="btn-small">Review!</a>
+                <p>Review this word now.</p>
+                <div class="card-foot">
+                    <a href="{% url 'SpeakNoy:card' card.pk %}" class="btn-small">Review</a>
+                </div>
             </div>
         {% empty %}
-            <p>No words to review yet.</p>
+            <div class="empty-state">
+                <h3>No words to review yet</h3>
+                <p>Choose a dialect or add cards to begin your daily practice.</p>
+            </div>
         {% endfor %}
     </div>
-
-    <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">Back to Flashcards</a>
 {% endblock %}

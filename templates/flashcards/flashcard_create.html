@@ -1,17 +1,27 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
-{% endblock %}
-
 {% block title %}Create a Custom Flashcard{% endblock %}
+
 {% block content %}
-    <h1>Create a Custom Flashcard</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Save card</button>
-        <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">⨉ Cancel</a>
-    </form>
+    <div class="form-shell">
+        <div class="form-card">
+            <div class="page-header" style="margin-bottom: 1.2rem;">
+                <div class="page-header-main">
+                    <span class="badge badge-soft">Custom card</span>
+                    <h1 style="margin-top: 0.65rem;">Create a custom flashcard</h1>
+                    <p style="margin-top: 0.6rem;">Add a word, its meaning, and helpful context so your deck feels personal and easier to remember.</p>
+                </div>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Save card</button>
+                    <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}

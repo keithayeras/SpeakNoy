@@ -1,20 +1,62 @@
 <!DOCTYPE html>
 {% load static %}
-
 <html lang="en-US">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{% block title %}{% endblock %} | SpeakNoy</title>
+        <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
+        <script src="https://cdn.lordicon.com/lordicon.js"></script>
         {% block extra_css %}{% endblock %}
     </head>
 
     <body>
-        Logged in as {{ user.username }}
-        <form action="{% url 'accounts:logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="logout-btn">Logout</button>
-        </form>
-        {% block content %}{% endblock %}
+        <div class="site-shell">
+            <header class="site-header">
+                <div class="header-inner">
+                    <a href="{% url 'SpeakNoy:cardlist' %}" class="brand">
+                        <div class="brand-mark">
+                            <lord-icon
+                            src="https://cdn.lordicon.com/wwsllqpi.json"
+                            trigger="hover"
+                            colors="primary:#ffffff"
+                            style="margin-left:1px;width:35px;height:35px">
+                            </lord-icon>
+                        </div>
+                        <div class="brand-text">
+                            <h1>SpeakNoy</h1>
+                            <p>Learn Filipino dialects through warm, memorable flashcards.</p>
+                        </div>
+                    </a>
+
+                    <div class="header-actions">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">Flashcards</a>
+                            <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">Collections</a>
+                            <form action="{% url 'accounts:logout' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="logout-btn">
+                                    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+                                    <lord-icon
+                                        src="https://cdn.lordicon.com/tmoefgdy.json"
+                                        trigger="hover"
+                                        target=".logout-btn"
+                                        colors="primary:#ffffff"
+                                        style="width:25px;height:25px">
+                                    </lord-icon>
+                                    Logout</button>
+                            </form>
+                        {% else %}
+                            <a href="{% url 'accounts:login' %}" class="btn-secondary">Login</a>
+                            <a href="{% url 'accounts:signup' %}" class="btn-primary">Create account</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-content">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
     </body>
 </html>

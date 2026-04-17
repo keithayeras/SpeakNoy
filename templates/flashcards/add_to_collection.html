@@ -1,14 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'flashcards/style.css' %}">{% endblock %}
+
 {% block title %}Add Card to Collection{% endblock %}
+
 {% block content %}
-    <h1>Which collection do you want to add "{{ flashcard.word }}" to?</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Add to Collection</button>
-    </form>
-    <h2></h2>
-    <a href="{% url 'SpeakNoy:card' flashcard.pk %}" class="btn-secondary">⨉ Cancel</a>
+    <div class="form-shell">
+        <div class="form-card">
+            <span class="badge badge-soft">Collection manager</span>
+            <h1 style="margin-top: 0.7rem;">Add “{{ flashcard.word }}” to a collection</h1>
+            <p style="margin-top: 0.55rem;">Choose where this flashcard belongs so you can organize words by topic, dialect, or difficulty.</p>
+
+            <form method="post" style="margin-top: 1.25rem;">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Add to collection</button>
+                    <a href="{% url 'SpeakNoy:card' flashcard.pk %}" class="btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}

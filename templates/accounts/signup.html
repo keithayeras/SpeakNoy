@@ -1,9 +1,36 @@
-<h1>Sign up</h1>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Sign up | SpeakNoy</title>
+        <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
+    </head>
+    <body>
+        <div class="auth-page">
+            <div class="login-card">
+                <div class="auth-brand">
+                    <div class="brand-mark">SN</div>
+                    <div>
+                        <h1 style="margin: 0; color: var(--heading);">SpeakNoy</h1>
+                        <p style="margin: 0; color: var(--text-soft);">Learn Filipino dialects one flashcard at a time</p>
+                    </div>
+                </div>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create account</button>
-</form>
+                <div class="auth-intro">
+                    <h1>Create your account</h1>
+                    <p>Join SpeakNoy to save flashcards, organize collections, and build a steady review habit.</p>
+                </div>
 
-<a href="/accounts/login/">Already have an account?</a>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn-primary">Create account</button>
+                </form>
+
+                <p class="auth-links">Already have an account? <a href="/accounts/login/">Log in here</a>.</p>
+            </div>
+        </div>
+    </body>
+</html>

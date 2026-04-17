@@ -1,42 +1,66 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
-{% endblock %}
-
 {% block title %}{{ flashcard.word }}{% endblock %}
+
 {% block content %}
     <div class="modal-overlay" id="fcOverlay">
-            <div class="modal-content" onclick="event.stopPropagation()">
-                <h1>{{ flashcard.word }}</h1>
+        <div class="modal-content flashcard-modal" onclick="event.stopPropagation()">
+            <div class="flashcard-topbar">
+                <span class="badge badge-soft">{{ flashcard.cardtype }} card</span>
+                <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-close">Close card</a>
+            </div>
 
-                <div id="rearOfCard" style="display:none;">
-                    <ul style="list-style: none; padding: 0;">
-                        <li>{{ flashcard.pronunciation }}</li>
-                        <li>{{ flashcard.definition }}</li>
-                        <li>{{ flashcard.purpose }}</li>
-                        <li>{{ flashcard.dialect }}</li>
+            <div class="flashcard-stage">
+                <div id="frontOfCard" class="card-face card-face-front">
+                    <p class="helper-text">Tap "Flip Card" to reveal the other side.</p>
+                    <h1>{{ flashcard.word }}</h1>
+                    <p>Learn the meaning, pronunciation, purpose, and dialect on the other side.</p>
+                </div>
+
+                <div id="rearOfCard" class="card-face" style="display:none;">
+                    <ul class="card-meta-list">
+                        <li>
+                            <span class="card-meta-label">Pronunciation</span>
+                            {{ flashcard.pronunciation|default:"—" }}
+                        </li>
+                        <li>
+                            <span class="card-meta-label">Definition</span>
+                            {{ flashcard.definition|default:"—" }}
+                        </li>
+                        <li>
+                            <span class="card-meta-label">Purpose / Usage</span>
+                            {{ flashcard.purpose|default:"—" }}
+                        </li>
+                        <li>
+                            <span class="card-meta-label">Dialect</span>
+                            {{ flashcard.dialect|default:"—" }}
+                        </li>
                     </ul>
                 </div>
-                
-                <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-close">⨉ Close Card</a>
-                <a href="{% url 'SpeakNoy:add_to_collection' flashcard.pk %}" class="btn-primary">Add to Collection</a>
-                <a href="{% url 'SpeakNoy:remove_from_collection' flashcard.pk %}" class="btn-primary">Remove from Collection</a>
-                <a href="{% url 'SpeakNoy:publicspace-upload-card' flashcard.pk %}" class="btn-primary">Add to Public Space</a>
-                <a href="{% url 'SpeakNoy:publicspace-save-card' flashcard.pk %}" class="btn-primary">Save Card</a>
-                <a href="{% url 'SpeakNoy:publicspace-remove-card' flashcard.pk %}" class="btn-primary">Remove from Public Space</a>
+            </div>
+
+            <div class="flashcard-actions">
+                <button type="button" id="flipCardBtn" class="btn-primary">Flip card</button>
+                <a href="{% url 'SpeakNoy:add_to_collection' flashcard.pk %}" class="btn-secondary">Add to collection</a>
+            </div>
+
+            <div class="flashcard-secondary-actions">
+                <a href="{% url 'SpeakNoy:publicspace-upload-card' flashcard.pk %}" class="btn-secondary">Add to public space</a>
+                <a href="{% url 'SpeakNoy:publicspace-save-card' flashcard.pk %}" class="btn-secondary">Save card</a>
+                <a href="{% url 'SpeakNoy:publicspace-remove-card' flashcard.pk %}" class="btn-secondary">Remove from public space</a>
                 {% if flashcard.cardtype == "Custom" %}
                     <form method="POST" action="{% url 'SpeakNoy:cardremove' flashcard.pk %}">
                         {% csrf_token %}
-                        <button type="submit" id="discard" class="btn-discard">Discard</button>
+                        <button type="submit" id="discard" class="btn-discard">Discard card</button>
                     </form>
                 {% endif %}
-                <h4>Click outside the card to flip it</h4>
+            </div>
         </div>
     </div>
 
     <script>
+<<<<<<< HEAD
         const flipButton = document.getElementById('fcOverlay')
         const rearOfCard = document.getElementById('rearOfCard')
 
@@ -65,3 +89,26 @@
                 <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-close">⨉</a>
             </div>
         </div>
+=======
+        const flipCardBtn = document.getElementById('flipCardBtn');
+        const cardOverlay = document.getElementById('fcOverlay');
+        const frontOfCard = document.getElementById('frontOfCard');
+        const rearOfCard = document.getElementById('rearOfCard');
+
+        function toggleCardFace() {
+            const isRearHidden = rearOfCard.style.display === 'none';
+            rearOfCard.style.display = isRearHidden ? 'flex' : 'none';
+            frontOfCard.style.display = isRearHidden ? 'none' : 'flex';
+        }
+
+        flipCardBtn.addEventListener('click', function (event) {
+            event.stopPropagation();
+            toggleCardFace();
+        });
+
+        cardOverlay.addEventListener('click', function () {
+            toggleCardFace();
+        });
+    </script>
+{% endblock %}
+>>>>>>> edce72627b65e27911bcf3cd55ae503615b7925d
