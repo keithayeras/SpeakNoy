@@ -286,7 +286,7 @@ class CollectionFormTest(TestCase):
         self.assertIn("name", form.errors)
 
     def test_collection_form_name_too_long(self):
-        form = FlashcardCollectionForm(data={"name": "A" * 64})
+        form = FlashcardCollectionForm(data={"name": "A" * 78})
         self.assertFalse(form.is_valid())
 
     def test_add_to_collection_form_valid(self):
@@ -299,7 +299,7 @@ class CollectionFormTest(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_add_to_collection_form_invalid_pk(self):
-        form = AddToCollectionForm(data={"collection": 9999})
+        form = AddToCollectionForm(data={"collection": 9876})
         self.assertFalse(form.is_valid())
 
 # This tests if the collection feature views work.
@@ -345,7 +345,7 @@ class CollectionDetailViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_collection_detail_missing_gives_404(self):
-        response = self.client.get(reverse("SpeakNoy:collection", args=[9999]))
+        response = self.client.get(reverse("SpeakNoy:collection", args=[31415]))
         self.assertEqual(response.status_code, 404)
 
     def test_collection_detail_shows_collection_name(self):
@@ -399,14 +399,14 @@ class AddCardToCollectionViewTest(TestCase):
             purpose="Noun",
             dialect="Cebuano"
         )
-        self.collection = FlashcardCollection.objects.create(name="Space Words")
+        self.collection = FlashcardCollection.objects.create(name="Collection Test")
 
     def test_add_to_collection(self):
         response = self.client.get(reverse("SpeakNoy:add_to_collection", args=[self.card.pk]))
         self.assertEqual(response.status_code, 200)
 
     def test_add_to_collection_missing_card_404(self):
-        response = self.client.get(reverse("SpeakNoy:add_to_collection", args=[9999]))
+        response = self.client.get(reverse("SpeakNoy:add_to_collection", args=[2026]))
         self.assertEqual(response.status_code, 404)
 
     def test_add_card_to_collection(self):
@@ -436,3 +436,102 @@ class AddCardToCollectionViewTest(TestCase):
         self.collection.flashcards.add(self.card)
         self.collection.flashcards.add(self.card)
         self.assertEqual(self.collection.flashcards.count(), 1)
+
+# The tests below will test if the Remove from Collection form works.
+
+class RemoveFromCollectionFormTest(TestCase):
+    def setUp(self):
+        self.collection = FlashcardCollection.objects.create(name="Collection Test")
+ 
+    def test_valid_form(self):
+        form = RemoveFromCollectionForm(data={"collection": self.collection.pk})
+        self.assertTrue(form.is_valid())
+ 
+    def test_invalid_blank_selection(self):
+        form = RemoveFromCollectionForm(data={"collection": ""})
+        self.assertFalse(form.is_valid())
+ 
+    def test_invalid_invalid_primary_key(self):
+        form = RemoveFromCollectionForm(data={"collection": 9876})
+        self.assertFalse(form.is_valid())
+
+# Public Space Tests
+
+# The tests below will test the Public Space model.
+
+class PublicSpaceModelTest(TestCase):
+    def setUp(self):
+        self.space = PublicSpace.objects.create(name="Public Space Test")
+        self.card = Flashcard.objects.create(
+            word="bulan",
+            pronunciation="/bu-lan/",
+            definition="Moon.",
+            purpose="Noun",
+            dialect="Cebuano"
+        )
+        self.collection = FlashcardCollection.objects.create(name="Collection Test")
+
+    def test_publicspace_initialized_empty(self):
+        self.assertEqual(self.space.flashcards.count(), 0)
+        self.assertEqual(self.space.collections.count(), 0)
+
+    def test_add_card_to_publicspace(self):
+        self.space.flashcards.add(self.card)
+        self.assertIn(self.card, self.space.flashcards.all())
+
+    def test_add_collection_to_publicspace(self):
+        self.space.collections.add(self.collection)
+        self.assertIn(self.collection, self.space.collections.all())
+
+    def test_remove_card_from_publicspace(self):
+        self.space.flashcards.add(self.card)
+        self.space.flashcards.remove(self.card)
+        self.assertNotIn(self.card, self.space.flashcards.all())
+
+    def test_remove_collection_from_publicspace(self):
+        self.space.collections.add(self.collection)
+        self.space.collections.remove(self.collection)
+        self.assertNotIn(self.collection, self.space.collections.all())
+
+# The tests below will check if the form for the Public Space works.
+
+class PublicSpaceFormTest(TestCase):
+    def test_if_form_valid(self):
+        form = PublicSpaceForm(data={"name": "Public Space Test"})
+        self.assertTrue(form.is_valid())
+ 
+    def test_invalid_name_not_given(self):
+        form = PublicSpaceForm(data={"name": ""})
+        self.assertFalse(form.is_valid())
+        self.assertIn("name", form.errors)
+ 
+    def test_invalid_name_too_long(self):
+        form = PublicSpaceForm(data={"name": "A" * 98})
+        self.assertFalse(form.is_valid())
+
+# These test if the Public Space interface or view works
+
+class PublicSpaceViewTest(TestCase):
+    def test_publicspace_view_returns_200(self):
+        response = self.client.get(reverse("SpeakNoy:publicspace"))
+        self.assertEqual(response.status_code, 200)
+ 
+    def test_publicspace_view_shows_cards(self):
+        space = PublicSpace.objects.create(name="Public Space")
+        card = Flashcard.objects.create(
+            word="bulan",
+            pronunciation="/bu-lan/",
+            definition="Moon.",
+            purpose="Noun",
+            dialect="Cebuano"
+        )
+        space.flashcards.add(card)
+        response = self.client.get(reverse("SpeakNoy:publicspace"))
+        self.assertContains(response, "bulan")
+ 
+    def test_publicspace_view_shows_collections(self):
+        space = PublicSpace.objects.create(name="Public Space")
+        collection = FlashcardCollection.objects.create(name="Collection Test")
+        space.collections.add(collection)
+        response = self.client.get(reverse("SpeakNoy:publicspace"))
+        self.assertContains(response, "Collection Test")
