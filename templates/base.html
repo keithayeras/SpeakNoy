@@ -34,6 +34,7 @@
                         {% if user.is_authenticated %}
                             <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">Flashcards</a>
                             <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">Collections</a>
+                            <a href="{% url 'SpeakNoy:publicspace' %}" class="btn-secondary">Public space</a>
                             <form action="{% url 'accounts:logout' %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="logout-btn">
