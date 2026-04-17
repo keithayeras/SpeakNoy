@@ -60,36 +60,6 @@
     </div>
 
     <script>
-<<<<<<< HEAD
-        const flipButton = document.getElementById('fcOverlay')
-        const rearOfCard = document.getElementById('rearOfCard')
-
-        flipButton.addEventListener('click', function () {
-            if (rearOfCard.style.display === "none") rearOfCard.style.display = "block";
-            else rearOfCard.style.display = "none";
-        });
-    </script>
-{% endblock %}
-
-    <div class="modal-overlay">
-            <div class="modal-content">
-                <h1>{{ flashcard.word }}</h1>
-
-                <div id="rearOfCard" style="display:none;">
-                    <ul>
-                        <li>{{ flashcard.pronunciation }}</li>
-                        <li>{{ flashcard.definition }}</li>
-                        <li>{{ flashcard.purpose }}</li>
-                        <li>{{ flashcard.dialect }}</li>
-                    </ul>
-                </div>
-
-                <button id="flip" class='btn-primary'>Flip Card</button>
-                <a href="{% url 'SpeakNoy:add_to_collection' flashcard.pk %}" class="btn-primary">Add to Collection...</a>
-                <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-close">⨉</a>
-            </div>
-        </div>
-=======
         const flipCardBtn = document.getElementById('flipCardBtn');
         const cardOverlay = document.getElementById('fcOverlay');
         const frontOfCard = document.getElementById('frontOfCard');
@@ -111,4 +81,3 @@
         });
     </script>
 {% endblock %}
->>>>>>> edce72627b65e27911bcf3cd55ae503615b7925d
