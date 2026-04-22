@@ -11,6 +11,9 @@
             <p style="margin-top: 0.55rem;">Master these {{ flashcard|length }} words today with a short, focused review session.</p>
         </div>
         <div class="page-actions">
+            {% if user.is_authenticated %}
+                <a href="{% url 'accounts:daily_review_settings' %}" class="btn-small">Set reminder time</a>
+            {% endif %}
             <a href="{% url 'SpeakNoy:cardlist' %}" class="btn-secondary">Back to flashcards</a>
         </div>
     </div>
