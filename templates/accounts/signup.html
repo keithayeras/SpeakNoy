@@ -5,13 +5,22 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Sign up | SpeakNoy</title>
+        <link rel="icon" type="image/x-icon" href="{% static 'flashcards/SpeakNoy.ico' %}">
         <link rel="stylesheet" href="{% static 'flashcards/style.css' %}">
+        <script src="https://cdn.lordicon.com/lordicon.js"></script>
     </head>
     <body>
         <div class="auth-page">
             <div class="login-card">
                 <div class="auth-brand">
-                    <div class="brand-mark">SN</div>
+                    <div class="brand-mark">
+                        <lord-icon
+                            src="https://cdn.lordicon.com/wwsllqpi.json"
+                            trigger="hover"
+                            colors="primary:#ffffff"
+                            style="width:55px;height:55px">
+                        </lord-icon>
+                    </div>
                     <div>
                         <h1 style="margin: 0; color: var(--heading);">SpeakNoy</h1>
                         <p style="margin: 0; color: var(--text-soft);">Your flashcard-based Philippine language learning helper.</p>
@@ -19,7 +28,7 @@
                 </div>
 
                 <div class="auth-intro">
-                    <h1>Create your account</h1>
+                    <h2>Create your account</h2>
                     <p>Join SpeakNoy to save and review Filipino language flashcards, as well as organize collections</p>
                 </div>
 

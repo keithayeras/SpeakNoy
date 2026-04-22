@@ -44,39 +44,39 @@ def flashcard_list_view(request):
     if request.user.is_authenticated and not selected_dialect:
         show_selection_prompt = True
     
+    # Get current time and date from timezone-aware now
+    now = timezone.localtime()
+    today = str(now.date())
+    now_time = now.time().replace(tzinfo=None)
+    
     # Determine whether we can still review today
-    today = str(date.today())
     review_completed_date = request.session.get('review_completed_date')
     can_review = selected_dialect and review_completed_date != today
 
     # Determine if we should show the review reminder popup
+    # This is independent of can_review - it should appear at the scheduled time regardless
+    review_popup_time = None
     if request.user.is_authenticated:
         profile = getattr(request.user, 'profile', None)
-        review_popup_time = None
         if profile and profile.daily_review_time:
             review_popup_time = profile.daily_review_time.strftime("%H:%M")
     else:
         review_popup_time = request.session.get('review_popup_time')
 
     last_popup_date = request.session.get('review_popup_shown_date')
-    now = timezone.localtime()
-    now_time = now.time().replace(tzinfo=None)
 
-    if can_review:
-        if review_popup_time:
-            try:
-                scheduled_time = datetime.strptime(review_popup_time, "%H:%M").time()
-            except ValueError:
-                scheduled_time = None
-
-            if scheduled_time and now_time >= scheduled_time and last_popup_date != today:
+    # Show popup if:
+    # 1. User has scheduled time set
+    # 2. Current time is >= scheduled time
+    # 3. Popup hasn't been shown today yet
+    if review_popup_time and not schedule_saved:
+        try:
+            scheduled_time = datetime.strptime(review_popup_time, "%H:%M").time()
+            if now_time >= scheduled_time and last_popup_date != today:
                 show_review_popup = True
                 request.session['review_popup_shown_date'] = today
-        else:
-            # Default behavior: show popup once per day on first open
-            if new_dialect and last_popup_date != today:
-                show_review_popup = True
-                request.session['review_popup_shown_date'] = today
+        except ValueError:
+            pass
 
     flashcards = Flashcard.objects.filter(Q(creator=request.user) | Q(is_public=True))
     if selected_dialect:

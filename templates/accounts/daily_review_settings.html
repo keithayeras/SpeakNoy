@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Daily Review Settings{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 2rem auto;">
+    <div class="section-block">
+        <div class="section-intro">
+            <div>
+                <h1>Daily Review Settings</h1>
+                <p>Set your preferred time for daily review reminders</p>
+            </div>
+        </div>
+
+        {% if message %}
+            <div class="alert alert-{{ message_type }}" style="margin-bottom: 1rem; padding: 1rem; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 0.25rem;">
+                {{ message }}
+            </div>
+        {% endif %}
+
+        <form method="post" style="margin-top: 2rem;">
+            {% csrf_token %}
+            
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="{{ form.daily_review_time.id_for_label }}" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">
+                    {{ form.daily_review_time.label }}
+                </label>
+                {{ form.daily_review_time }}
+                {% if form.daily_review_time.help_text %}
+                    <small style="display: block; margin-top: 0.25rem; color: #6c757d;">
+                        {{ form.daily_review_time.help_text|safe }}
+                    </small>
+                {% endif %}
+                {% if form.daily_review_time.errors %}
+                    <div style="color: #dc3545; margin-top: 0.25rem;">
+                        {{ form.daily_review_time.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="page-actions" style="margin-top: 2rem;">
+                <button type="submit" class="btn-primary">Save reminder time</button>
+                <a href="{% url 'SpeakNoy:daily_review' %}" class="btn-secondary">Back to daily review</a>
+            </div>
+        </form>
+
+        {% if current_time %}
+            <div style="margin-top: 2rem; padding: 1rem; background-color: #f8f9fa; border-radius: 0.25rem;">
+                <p style="margin: 0; color: #6c757d;">
+                    <strong>Current reminder time:</strong> {{ current_time }}
+                </p>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #6c757d;">
+                    You will receive a reminder to review at this time each day when you visit SpeakNoy.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+</style>
+{% endblock %}

@@ -1,6 +1,11 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 from django.core.exceptions import ValidationError
+from django.utils import timezone
+from django.contrib.auth.models import User
+from datetime import datetime, time
+from unittest.mock import patch
+import pytz
 from .models import *
 from .forms import *
 
@@ -535,3 +540,147 @@ class PublicSpaceViewTest(TestCase):
         space.collections.add(collection)
         response = self.client.get(reverse("SpeakNoy:publicspace"))
         self.assertContains(response, "Collection Test")
+
+
+class DailyReviewPopupTest(TestCase):
+    """Test the daily review popup functionality"""
+    
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='testuser', password='testpass123')
+        self.url = reverse('SpeakNoy:cardlist')
+    
+    def test_popup_does_not_show_without_scheduled_time(self):
+        """Test that popup doesn't show when no time is set"""
+        self.client.login(username='testuser', password='testpass123')
+        response = self.client.get(self.url)
+        self.assertFalse(response.context['show_review_popup'])
+    
+    def test_popup_shows_when_time_passed(self):
+        """Test that popup shows when current time is >= scheduled time"""
+        # Set user's daily review time to a past time
+        self.user.profile.daily_review_time = time(8, 0)
+        self.user.profile.save()
+        
+        self.client.login(username='testuser', password='testpass123')
+        
+        # Mock timezone to be after scheduled time
+        with patch('SpeakNoy.views.timezone.localtime') as mock_now:
+            mock_now.return_value = datetime(2026, 4, 22, 15, 30, tzinfo=pytz.UTC)
+            response = self.client.get(self.url)
+            self.assertTrue(response.context['show_review_popup'])
+    
+    def test_popup_not_shows_before_scheduled_time(self):
+        """Test that popup doesn't show before scheduled time"""
+        # Set user's daily review time to a future time
+        self.user.profile.daily_review_time = time(20, 0)
+        self.user.profile.save()
+        
+        self.client.login(username='testuser', password='testpass123')
+        
+        # Mock timezone to be before scheduled time
+        with patch('SpeakNoy.views.timezone.localtime') as mock_now:
+            mock_now.return_value = datetime(2026, 4, 22, 10, 0, tzinfo=pytz.UTC)
+            response = self.client.get(self.url)
+            self.assertFalse(response.context['show_review_popup'])
+    
+    def test_popup_shown_only_once_per_day(self):
+        """Test that popup is shown only once per day"""
+        self.user.profile.daily_review_time = time(8, 0)
+        self.user.profile.save()
+        
+        self.client.login(username='testuser', password='testpass123')
+        
+        with patch('SpeakNoy.views.timezone.localtime') as mock_now:
+            mock_now.return_value = datetime(2026, 4, 22, 15, 30, tzinfo=pytz.UTC)
+            
+            # First visit
+            response1 = self.client.get(self.url)
+            self.assertTrue(response1.context['show_review_popup'])
+            
+            # Second visit same day
+            response2 = self.client.get(self.url)
+            self.assertFalse(response2.context['show_review_popup'])
+    
+    def test_popup_resets_next_day(self):
+        """Test that popup resets the next day"""
+        self.user.profile.daily_review_time = time(8, 0)
+        self.user.profile.save()
+        
+        self.client.login(username='testuser', password='testpass123')
+        
+        with patch('SpeakNoy.views.timezone.localtime') as mock_now:
+            # First day
+            mock_now.return_value = datetime(2026, 4, 22, 15, 30, tzinfo=pytz.UTC)
+            response1 = self.client.get(self.url)
+            self.assertTrue(response1.context['show_review_popup'])
+            
+            # Second day
+            mock_now.return_value = datetime(2026, 4, 23, 15, 30, tzinfo=pytz.UTC)
+            response2 = self.client.get(self.url)
+            self.assertTrue(response2.context['show_review_popup'])
+    
+    def test_popup_independent_of_dialect_selection(self):
+        """Test that popup appears regardless of dialect selection"""
+        self.user.profile.daily_review_time = time(8, 0)
+        self.user.profile.save()
+        
+        self.client.login(username='testuser', password='testpass123')
+        
+        # Don't select a dialect
+        session = self.client.session
+        # Make sure no dialect is selected
+        if 'selected_dialect' in session:
+            del session['selected_dialect']
+        session.save()
+        
+        with patch('SpeakNoy.views.timezone.localtime') as mock_now:
+            mock_now.return_value = datetime(2026, 4, 22, 15, 30, tzinfo=pytz.UTC)
+            response = self.client.get(self.url)
+            self.assertTrue(response.context['show_review_popup'])
+    
+    def test_popup_independent_of_review_completion(self):
+        """Test that popup appears regardless of review completion"""
+        self.user.profile.daily_review_time = time(8, 0)
+        self.user.profile.save()
+        
+        self.client.login(username='testuser', password='testpass123')
+        
+        # Mark review as completed for today
+        session = self.client.session
+        session['review_completed_date'] = str(timezone.now().date())
+        session.save()
+        
+        with patch('SpeakNoy.views.timezone.localtime') as mock_now:
+            mock_now.return_value = datetime(2026, 4, 22, 15, 30, tzinfo=pytz.UTC)
+            response = self.client.get(self.url)
+            self.assertTrue(response.context['show_review_popup'])
+    
+    def test_schedule_saved_message(self):
+        """Test that schedule saved message appears after POST"""
+        self.client.login(username='testuser', password='testpass123')
+        response = self.client.post(self.url, {'daily_review_time': '14:30'})
+        self.assertTrue(response.context['schedule_saved'])
+    
+    def test_popup_time_in_context(self):
+        """Test that popup time is available in context"""
+        self.user.profile.daily_review_time = time(9, 30)
+        self.user.profile.save()
+        
+        self.client.login(username='testuser', password='testpass123')
+        response = self.client.get(self.url)
+        self.assertEqual(response.context['review_popup_time'], '09:30')
+    
+    def test_multiple_time_changes(self):
+        """Test that popup time can be changed multiple times"""
+        self.client.login(username='testuser', password='testpass123')
+        
+        # Change time first time
+        self.client.post(self.url, {'daily_review_time': '08:00'})
+        self.user.profile.refresh_from_db()
+        self.assertEqual(self.user.profile.daily_review_time, time(8, 0))
+        
+        # Change time second time
+        self.client.post(self.url, {'daily_review_time': '17:00'})
+        self.user.profile.refresh_from_db()
+        self.assertEqual(self.user.profile.daily_review_time, time(17, 0))
