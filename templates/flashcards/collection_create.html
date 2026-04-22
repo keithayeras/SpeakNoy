@@ -8,14 +8,14 @@
         <div class="form-card">
             <span class="badge badge-soft">New collection</span>
             <h1 style="margin-top: 0.7rem;">Create a new collection</h1>
-            <p style="margin-top: 0.55rem;">Group your flashcards into themed sets such as greetings, food, travel, or regional expressions.</p>
+            <p style="margin-top: 0.55rem;">Group your flashcards into collections based on purpose, expression, or any way you like.</p>
 
             <form method="post" style="margin-top: 1.25rem;">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <div class="form-actions">
                     <button type="submit" class="btn-primary">Create collection</button>
-                    <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">Cancel</a>
+                    <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">⨉ Cancel</a>
                 </div>
             </form>
         </div>

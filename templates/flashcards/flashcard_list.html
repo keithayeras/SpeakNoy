@@ -7,9 +7,8 @@
     <section class="hero-grid">
         <div class="hero-card">
             <div class="page-header-main">
-                <span class="badge badge-soft">Filipino language learning</span>
-                <h1 style="margin-top: 0.65rem;">Discover words, phrases, and dialects with SpeakNoy</h1>
-                <p style="margin-top: 0.75rem;">Build your vocabulary through simple flashcards, curated collections, and daily review sessions inspired by Filipino warmth and community.</p>
+                <h1 style="margin-top: 0.65rem;">Discover Filipino dialects with SpeakNoy</h1>
+                <p style="margin-top: 0.75rem;">Build your vocabulary for Filipino dialects through flashcards, collections, and review sessions.</p>
             </div>
 
             <div class="hero-chip-row">
@@ -31,7 +30,7 @@
             <div class="section-intro">
                 <div>
                     <h2>Study settings</h2>
-                    <p>Choose the dialect you want to focus on today.</p>
+                    <p>Choose the dialect you want to study today.</p>
                 </div>
             </div>
 
@@ -70,7 +69,7 @@
             <div class="modal-content">
                 <span class="badge badge-soft">Mabuhay!</span>
                 <h2 style="margin-top: 0.8rem;">Welcome to SpeakNoy</h2>
-                <p style="margin-top: 0.6rem;">Which Filipino dialect would you like to explore today?</p>
+                <p style="margin-top: 0.6rem;">Which Philippine dialect would you like to study today?</p>
                 <div class="dialect-grid">
                     {% for d in dialects %}
                         <a href="?set_dialect={{ d }}" class="btn-primary">{{ d }}</a>
@@ -85,7 +84,7 @@
             <div class="modal-content">
                 <span class="badge badge-soft">Account needed</span>
                 <h3 style="margin-top: 0.8rem;">Please log in to continue</h3>
-                <p style="margin-top: 0.6rem;">Create an account or sign in to save cards, build collections, and keep your review progress.</p>
+                <p style="margin-top: 0.6rem;">Create an account or sign in to save cards, build collections, and keep review progress.</p>
                 <div class="modal-buttons" style="margin-top: 1.25rem;">
                     <a href="{% url 'accounts:login' %}" class="btn-primary">Login</a>
                     <a href="{% url 'accounts:signup' %}" class="btn-secondary">Register</a>
@@ -146,7 +145,7 @@
             {% empty %}
                 <div class="empty-state">
                     <h3>No words to review yet</h3>
-                    <p>Once you choose a dialect or add your own cards, your learning deck will appear here.</p>
+                    <p>Your cards will appear here when you begin studying a dialect or add a new card.</p>
                 </div>
             {% endfor %}
         </div>

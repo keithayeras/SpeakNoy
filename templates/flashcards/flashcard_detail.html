@@ -14,9 +14,8 @@
 
             <div class="flashcard-stage">
                 <div id="frontOfCard" class="card-face card-face-front">
-                    <p class="helper-text">Tap "Flip Card" to reveal the other side.</p>
+                    <p class="helper-text">Click "Flip Card" to reveal the other side.</p>
                     <h1>{{ flashcard.word }}</h1>
-                    <p>Learn the meaning, pronunciation, purpose, and dialect on the other side.</p>
                 </div>
 
                 <div id="rearOfCard" class="card-face" style="display:none;">
@@ -43,18 +42,26 @@
 
             <div class="flashcard-actions">
                 <button type="button" id="flipCardBtn" class="btn-primary">Flip card</button>
-                <a href="{% url 'SpeakNoy:add_to_collection' flashcard.pk %}" class="btn-secondary">Add to collection</a>
+                {% if flashcard.creator == request.user %}
+                    <a href="{% url 'SpeakNoy:add_to_collection' flashcard.pk %}" class="btn-secondary">Add to collection</a>
+                {% endif %}
             </div>
 
             <div class="flashcard-secondary-actions">
-                <a href="{% url 'SpeakNoy:publicspace-upload-card' flashcard.pk %}" class="btn-secondary">Add to public space</a>
+                {% if flashcard.creator == request.user %}
+                    <a href="{% url 'SpeakNoy:publicspace-upload-card' flashcard.pk %}" class="btn-secondary">Add to public space</a>
+                {% endif %}
                 <a href="{% url 'SpeakNoy:publicspace-save-card' flashcard.pk %}" class="btn-secondary">Save card</a>
-                <a href="{% url 'SpeakNoy:publicspace-remove-card' flashcard.pk %}" class="btn-secondary">Remove from public space</a>
+                {% if flashcard.creator == request.user %}
+                    <a href="{% url 'SpeakNoy:publicspace-remove-card' flashcard.pk %}" class="btn-secondary">Remove from public space</a>
+                {% endif %}
                 {% if flashcard.cardtype == "Custom" %}
+                    {% if flashcard.creator == request.user %}
                     <form method="POST" action="{% url 'SpeakNoy:cardremove' flashcard.pk %}">
                         {% csrf_token %}
                         <button type="submit" id="discard" class="btn-discard">Discard card</button>
                     </form>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

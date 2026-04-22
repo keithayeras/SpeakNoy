@@ -6,16 +6,15 @@
 {% block content %}
     <div class="form-shell">
         <div class="form-card">
-            <span class="badge badge-soft">Collection manager</span>
             <h1 style="margin-top: 0.7rem;">Add “{{ flashcard.word }}” to a collection</h1>
-            <p style="margin-top: 0.55rem;">Choose where this flashcard belongs so you can organize words by topic, dialect, or difficulty.</p>
+            <p style="margin-top: 0.55rem;">Choose which collection to add this flashcard.</p>
 
             <form method="post" style="margin-top: 1.25rem;">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <div class="form-actions">
                     <button type="submit" class="btn-primary">Add to collection</button>
-                    <a href="{% url 'SpeakNoy:card' flashcard.pk %}" class="btn-secondary">Cancel</a>
+                    <a href="{% url 'SpeakNoy:card' flashcard.pk %}" class="btn-secondary">⨉ Cancel</a>
                 </div>
             </form>
         </div>
