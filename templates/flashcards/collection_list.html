@@ -8,7 +8,7 @@
         <div class="page-header-main">
             <span class="badge badge-soft">Your library</span>
             <h1 style="margin-top: 0.65rem;">Collections</h1>
-            <p style="margin-top: 0.6rem;">Keep related flashcards together so studying feels focused, organized, and easier to revisit.</p>
+            <p style="margin-top: 0.6rem;">Keep related flashcards together to make studying easier and more organized.</p>
         </div>
         <div class="page-actions">
             {% if user.is_authenticated %}
@@ -29,7 +29,7 @@
         {% empty %}
             <div class="empty-state">
                 <h3>No collections yet</h3>
-                <p>Create your first collection to start grouping words into meaningful study sets.</p>
+                <p>Create your first collection to start grouping cards together.</p>
             </div>
         {% endfor %}
     </div>

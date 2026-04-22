@@ -9,7 +9,7 @@
             <div class="page-header-main">
                 <span class="badge badge-soft">Collection</span>
                 <h1 style="margin-top: 0.65rem;">{{ collection.name }}</h1>
-                <p style="margin-top: 0.55rem;">{{ collection.flashcards.count }} card{{ collection.flashcards.count|pluralize }} in this study set.</p>
+                <p style="margin-top: 0.55rem;">{{ collection.flashcards.count }} card{{ collection.flashcards.count|pluralize }} in this collection.</p>
             </div>
             <div class="page-actions">
                 <a href="{% url 'SpeakNoy:collectionlist' %}" class="btn-secondary">Back to collections</a>
@@ -17,17 +17,17 @@
         </div>
 
         <div class="page-actions">
-            <a href="{% url 'SpeakNoy:publicspace-upload-collection' collection.pk %}" class="btn-primary">Add to public space</a>
+            <a href="{% url 'SpeakNoy:publicspace-upload-collection' collection.pk %}" class="btn-primary">Add to Public Space</a>
             <a href="{% url 'SpeakNoy:publicspace-save-collection' collection.pk %}" class="btn-secondary">Save collection</a>
-            <a href="{% url 'SpeakNoy:publicspace-remove-collection' collection.pk %}" class="btn-secondary">Remove from public space</a>
+            <a href="{% url 'SpeakNoy:publicspace-remove-collection' collection.pk %}" class="btn-secondary">Remove from Public Space</a>
         </div>
     </section>
 
     <section class="section-block">
         <div class="section-intro">
             <div>
-                <h2>Cards in this collection</h2>
-                <p>Open a card to study its details or add more cards from your flashcard library.</p>
+                <h2>Cards in this Collection</h2>
+                <p>Open a card to study its details or add more cards from your flashcard collection.</p>
             </div>
         </div>
 
@@ -42,7 +42,7 @@
             {% empty %}
                 <div class="empty-state">
                     <h3>No flashcards here yet</h3>
-                    <p>Add cards to this collection while viewing a flashcard and selecting <strong>Add to collection</strong>.</p>
+                    <p>Add cards to this collection while viewing a flashcard by selecting <strong>Add to collection</strong>.</p>
                 </div>
             {% endfor %}
         </div>
