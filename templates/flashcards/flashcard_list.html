@@ -45,6 +45,9 @@
             </form>
 
             <div class="page-actions" style="margin-top: 1rem;">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'accounts:daily_review_settings' %}" class="btn-secondary">Set reminder time</a>
+                {% endif %}
                 {% if can_review %}
                     <a href="{% url 'SpeakNoy:daily_review' %}" class="btn-review" style="margin-top: 70px; margin-bottom: -20px;">
                         <script src="https://cdn.lordicon.com/lordicon.js"></script>
