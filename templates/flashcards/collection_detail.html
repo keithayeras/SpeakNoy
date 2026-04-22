@@ -9,6 +9,7 @@
             <div class="page-header-main">
                 <span class="badge badge-soft">Collection</span>
                 <h1 style="margin-top: 0.65rem;">{{ collection.name }}</h1>
+                <p>Collection by: {{ collection.creator }}</p>
                 <p style="margin-top: 0.55rem;">{{ collection.flashcards.count }} card{{ collection.flashcards.count|pluralize }} in this collection.</p>
             </div>
             <div class="page-actions">
@@ -26,7 +27,9 @@
                         <button type="submit" id="discard" class="btn-discard">Discard collection</button>
                 </form>
             {% endif %}
-            <a href="{% url 'SpeakNoy:publicspace-save-collection' collection.pk %}" class="btn-secondary">Save collection</a>
+            {% if collection.creator != request.user %}
+                <a href="{% url 'SpeakNoy:publicspace-save-collection' collection.pk %}" class="btn-secondary">Save collection</a>
+            {% endif %}
         </div>
     </section>
 
