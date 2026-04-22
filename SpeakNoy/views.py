@@ -196,7 +196,7 @@ def collection_create_view(request):
             collection = form.save(commit=False)
             collection.creator = request.user
             collection.save()
-            return redirect("SpeakNoy:collection")
+            return redirect("SpeakNoy:collection", pk=collection.pk)
     else:
         form = FlashcardCollectionForm()
     return render(request, "flashcards/collection_create.html", {"form": form})
