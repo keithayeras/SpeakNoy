@@ -46,7 +46,7 @@
 
             <div class="page-actions" style="margin-top: 1rem;">
                 {% if can_review %}
-                    <a href="{% url 'SpeakNoy:daily_review' %}" class="btn-review">
+                    <a href="{% url 'SpeakNoy:daily_review' %}" class="btn-review" style="margin-top: 70px; margin-bottom: -20px;">
                         <script src="https://cdn.lordicon.com/lordicon.js"></script>
                         <lord-icon
                             src="https://cdn.lordicon.com/nayeills.json"
@@ -58,7 +58,7 @@
                         Start daily review</a>
                 {% endif %}
                 {% if selected_dialect %}
-                    <a href="{% url 'SpeakNoy:dialect_review' %}" class="btn-secondary">Review this dialect</a>
+                    <a href="{% url 'SpeakNoy:dialect_review' %}" class="btn-secondary" style="margin-bottom: -80px;">Review this dialect</a>
                 {% endif %}
             </div>
         </div>
