@@ -1,14 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'flashcards/style.css' %}">{% endblock %}
+
 {% block title %}Remove Card from Collection{% endblock %}
+
 {% block content %}
-    <h1>Which collection do you want to remove "{{ flashcard.word }}" from?</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Remove from Collection</button>
-    </form>
-    <h2></h2>
-    <a href="{% url 'SpeakNoy:card' flashcard.pk %}" class="btn-secondary">⨉ Cancel</a>
+    <div class="form-shell">
+        <div class="form-card">
+            <h1 style="margin-top: 0.7rem;">Remove flashcard from a collection</h1>
+            <p style="margin-top: 0.55rem;">Choose which flashcard to remove from this collection.</p>
+            <form method="post" style="margin-top: 1.25rem;">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Remove from collection</button>
+                    <a href="{% url 'SpeakNoy:collection' collection.pk %}" class="btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}

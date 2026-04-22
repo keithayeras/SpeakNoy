@@ -196,8 +196,7 @@ def collection_create_view(request):
             collection = form.save(commit=False)
             collection.creator = request.user
             collection.save()
-            print('hello?')
-            return redirect("SpeakNoy:collectionlist")
+            return redirect("SpeakNoy:collection")
     else:
         form = FlashcardCollectionForm()
     return render(request, "flashcards/collection_create.html", {"form": form})
@@ -205,37 +204,37 @@ def collection_create_view(request):
 def collection_add_card(request, pk):
     flashcard = get_object_or_404(Flashcard, pk=pk)
     if request.method == 'POST':
-        form = AddToCollectionForm(request.POST)
+        form = AddToCollectionForm(request.POST, user=request.user)
         if form.is_valid():
             collection = form.cleaned_data['collection']
             collection.flashcards.add(flashcard)
-            return redirect("SpeakNoy:card", pk=flashcard.pk)
+            return redirect("SpeakNoy:collection", pk=collection.pk)
     else:
-        form = AddToCollectionForm()
+        form = AddToCollectionForm(user=request.user)
     return render(request, "flashcards/add_to_collection.html", {
         "form": form,
         "flashcard": flashcard
     })
 
-@login_required
 def collection_remove_view(request, pk):
-    collection = get_object_or_404(FlashcardCollection, pk=pk)
-    collection.delete()
-    return redirect("SpeakNoy:collectionlist")
+    if request.method == 'POST':
+        collection = get_object_or_404(FlashcardCollection, pk=pk)
+        collection.delete()
+    return redirect('SpeakNoy:collectionlist')
 
 def collection_remove_card(request, pk):
-    flashcard = get_object_or_404(Flashcard, pk=pk)
+    collection = get_object_or_404(FlashcardCollection, pk=pk)
     if request.method == 'POST':
-        form = RemoveFromCollectionForm(request.POST)
+        form = RemoveFromCollectionForm(request.POST, collection_id=pk)
         if form.is_valid():
-            collection = form.cleaned_data['collection']
+            flashcard = form.cleaned_data['collection']
             collection.flashcards.remove(flashcard)
-            return redirect("SpeakNoy:card", pk=flashcard.pk)
+            return redirect("SpeakNoy:collection", pk=collection.pk)
     else:
-        form = RemoveFromCollectionForm()
+        form = RemoveFromCollectionForm(collection_id=pk)
     return render(request, "flashcards/remove_from_collection.html", {
         "form": form,
-        "flashcard": flashcard
+        "collection": collection
     })
     
 def publicspace_view(request):
@@ -303,7 +302,7 @@ def publicspace_save_collection(request, pk):
             creator = request.user,
         )
         saved_collection.flashcards.add(saved_card)
-    return redirect("SpeakNoy:cardlist")
+    return redirect("SpeakNoy:collectionlist")
 
 def publicspace_remove_card(request, pk):
     flashcard = get_object_or_404(Flashcard, pk=pk)

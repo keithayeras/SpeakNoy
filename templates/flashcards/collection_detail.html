@@ -17,9 +17,16 @@
         </div>
 
         <div class="page-actions">
-            <a href="{% url 'SpeakNoy:publicspace-upload-collection' collection.pk %}" class="btn-primary">Add to public space</a>
+            {% if collection.creator == request.user %}
+                <a href="{% url 'SpeakNoy:publicspace-upload-collection' collection.pk %}" class="btn-primary">Add to public space</a>
+                <a href="{% url 'SpeakNoy:publicspace-remove-collection' collection.pk %}" class="btn-secondary">Remove from public space</a>
+                <a href="{% url 'SpeakNoy:remove_from_collection' collection.pk %}" class="btn-secondary">Remove card from collection</a>
+                <form method="POST" action="{% url 'SpeakNoy:collectionremove' collection.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" id="discard" class="btn-discard">Discard collection</button>
+                </form>
+            {% endif %}
             <a href="{% url 'SpeakNoy:publicspace-save-collection' collection.pk %}" class="btn-secondary">Save collection</a>
-            <a href="{% url 'SpeakNoy:publicspace-remove-collection' collection.pk %}" class="btn-secondary">Remove from public space</a>
         </div>
     </section>
 
